@@ -56,8 +56,6 @@ class Iniciar_Sesion_Form {
 
 		$response = AG()->log_in( $data['email'], $data['password'] );
 
-		var_dump( $response );
-
 		if ( $response['success'] ) {
 			$form->success_message( $response['data']['message'] );
 		} else {
