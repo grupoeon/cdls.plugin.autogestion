@@ -22,6 +22,7 @@ class Iniciar_Sesion_Form {
 	 */
 	public static function build( $form ) {
 
+		// @phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['not_logged_in'] ) ) {
 			$form->error_message( 'Por favor, iniciá sesión para poder acceder a los servicios de autogestión.' );
 		}
