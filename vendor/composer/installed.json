@@ -1,0 +1,56 @@
+{
+    "packages": [
+        {
+            "name": "formr/formr",
+            "version": "v1.4.1",
+            "version_normalized": "1.4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/formr/Formr.git",
+                "reference": "2d324d5de3343b80d6127b4f202bbc56b2a59376"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/formr/Formr/zipball/2d324d5de3343b80d6127b4f202bbc56b2a59376",
+                "reference": "2d324d5de3343b80d6127b4f202bbc56b2a59376",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "time": "2022-01-22T20:44:12+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "class.formr.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Gavin",
+                    "homepage": "https://formr.github.io",
+                    "role": "Original Author"
+                }
+            ],
+            "description": "Formr is a PHP micro-framework which helps you build and validate forms quickly, painlessly, and without all the messy overhead.",
+            "support": {
+                "issues": "https://github.com/formr/Formr/issues",
+                "source": "https://github.com/formr/Formr/tree/v1.4.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/timgavin",
+                    "type": "github"
+                }
+            ],
+            "install-path": "../formr/formr"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
