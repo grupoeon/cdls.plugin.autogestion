@@ -76,7 +76,7 @@ class API_Controller {
 	 * @param array  $data The data.
 	 * @return API_Response
 	 */
-	private function error( $message, $data = null ) {
+	private function error( $message, $data = array() ) {
 		return array(
 			'success' => false,
 			'data'    => array_merge(
@@ -95,7 +95,7 @@ class API_Controller {
 	 * @param array  $data The data.
 	 * @return API_Response
 	 */
-	private function success( $message, $data = null ) {
+	private function success( $message, $data = array() ) {
 		return array(
 			'success' => true,
 			'data'    => array_merge(
