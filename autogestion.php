@@ -29,7 +29,8 @@ const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
 
-require ROOT_DIR . '/vendor/autoload.php';
-require ROOT_DIR . '/includes/post-type.php';
-require ROOT_DIR . '/includes/enqueues.php';
-require ROOT_DIR . '/includes/forms/iniciar-sesion.php';
+require_once ROOT_DIR . '/vendor/autoload.php';
+require_once ROOT_DIR . '/includes/post-type.php';
+require_once ROOT_DIR . '/includes/enqueues.php';
+require_once ROOT_DIR . '/includes/forms.php';
+require_once ROOT_DIR . '/includes/class-autogestion-controller.php';
