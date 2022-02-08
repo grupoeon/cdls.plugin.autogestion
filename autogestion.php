@@ -33,4 +33,5 @@ require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
 require_once ROOT_DIR . '/includes/enqueues.php';
 require_once ROOT_DIR . '/includes/forms.php';
+require_once ROOT_DIR . '/includes/class-api-controller.php';
 require_once ROOT_DIR . '/includes/class-autogestion-controller.php';

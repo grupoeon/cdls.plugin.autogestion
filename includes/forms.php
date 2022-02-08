@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || die;
 
 const REGISTERED_FORM_IDS = array(
 	'iniciar-sesion'    => __NAMESPACE__ . '\Iniciar_Sesion_Form',
+	'cerrar-sesion'     => __NAMESPACE__ . '\Cerrar_Sesion_Form',
 	'olvide-contrasena' => __NAMESPACE__ . '\Olvide_Contrasena_Form',
 	'perfil'            => __NAMESPACE__ . '\Perfil_Form',
 	'altas'             => __NAMESPACE__ . '\Altas_Form',
