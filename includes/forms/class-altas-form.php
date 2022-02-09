@@ -132,8 +132,9 @@ class Altas_Form {
 
 			$form->number(
 				array(
-					'name'  => 'vencimiento_tarjeta',
-					'label' => 'Vencimiento de la tarjeta',
+					'name'   => 'vencimiento_tarjeta',
+					'label'  => 'Vencimiento de la tarjeta',
+					'string' => 'placeholder="ej. AAAAMM"',
 				)
 			);
 
@@ -271,7 +272,39 @@ SQL,
 				)
 			);
 
-			$form->success_message( 'Tu solicitud de cambio de medio de pago fue enviada.' );
+			$client_data             = API()->get_client_data();
+			$tipo_documento          = $client_data['id_tipo_documento'];
+			$documento               = $client_data['documento'];
+			$correo                  = $client_data['correo'];
+			$fecha_gestion           = date( 'Y-m-d H:i:s' );
+			$apellido                = $tipo_documento == 2 ? $client_data['razon_social'] : $client_data['apellido'];
+			$nombre                  = $tipo_documento == 5 ? $client_data['nombre'] : '';
+			$telefono                = $client_data['telefono'];
+			$calle                   = $client_data['calle'];
+			$nro_calle               = $client_data['nro_calle'];
+			$piso                    = $client_data['piso'];
+			$departamento            = $client_data['departamento'];
+			$id_localidad            = $client_data['id_localidad'];
+			$id_provincia            = $client_data['id_provincia'];
+			$codigo_postal           = $client_data['codigo_postal'];
+			$id_condicion_fiscal     = $client_data['id_condicion_fiscal'];
+			$id_medio_de_pago        = $_POST['id_medio_de_pago'];
+			$tipo_medio_de_pago      = $id_medio_de_pago == 9 ? 2 : 1;
+			$id_medio_de_pago        = $id_medio_de_pago == 9 ? '' : $id_medio_de_pago;
+			$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
+			$mes_vencimiento_tarjeta = substr( $vencimiento_tarjeta, 4 );
+			$ano_vencimiento_tarjeta = substr( $vencimiento_tarjeta, 0, 4 );
+			$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
+			$marca                   = $_POST['marca'];
+			$dominio                 = $_POST['dominio'];
+			$modelo                  = $_POST['modelo'];
+			$id_categoria            = $_POST['id_categoria'];
+
+			TXT()->generate( 'Altas', ";$apellido;$nombre;$tipo_documento;$documento;$correo;$telefono;;$calle;$nro_calle;$piso;$departamento;;$id_provincia;$id_localidad;$codigo_postal;$id_condicion_fiscal;;$dominio;$marca;$modelo;;;;;;$tipo_medio_de_pago;$id_medio_de_pago;$nro_medio_de_pago;$mes_vencimiento_tarjeta;$ano_vencimiento_tarjeta;$mes_vencimiento_tarjeta;$ano_vencimiento_tarjeta;;$fecha_gestion;$fecha_gestion;$id_categoria;$gestion_id;" );
+
+			wp_mail( $correo, 'Caminos de las Sierras | Solicitud de Alta en trámite', "Su solicitud de alta de vehículo (<b>$dominio</b>) fue enviada. Dentro de las próximas 72 hs hábiles se le enviará un email informándole el resultado de la validación del trámite." );
+
+			$form->success_message( 'Su solicitud de alta de vehículo fue enviada. Dentro de las próximas 72 hs hábiles se le enviará un email informándole el resultado de la validación del trámite.' );
 		} else {
 			$errors = $valid;
 			ob_start();

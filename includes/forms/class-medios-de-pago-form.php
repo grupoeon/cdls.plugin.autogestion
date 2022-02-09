@@ -74,7 +74,7 @@ TXT
 				array(
 					'name'   => 'vencimiento_tarjeta',
 					'label'  => 'Vencimiento de la tarjeta',
-					'string' => 'placeholder="ej. MMAAAA"',
+					'string' => 'placeholder="ej. AAAAMM"',
 				)
 			);
 
@@ -182,7 +182,22 @@ SQL,
 				)
 			);
 
-			$form->success_message( 'Tu solicitud de cambio de medio de pago fue enviada.' );
+			$client_data             = API()->get_client_data();
+			$tipo_documento          = $client_data['id_tipo_documento'];
+			$documento               = $client_data['documento'];
+			$correo                  = $client_data['correo'];
+			$tipo_medio_de_pago      = $_POST['id_medio_de_pago'] == 9 ? 2 : 1;
+			$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
+			$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
+			$nombre_medio_de_pago    = $_POST['nombre'];
+			$documento_medio_de_pago = $_POST['documento'];
+			$fecha_gestion           = date( 'Ymdhis' );
+
+			TXT()->generate( 'CMP', "$tipo_documento;$documento;$correo;$tipo_medio_de_pago;$nro_medio_de_pago;$vencimiento_tarjeta;$nombre_medio_de_pago;$documento_medio_de_pago;$gestion_id;$fecha_gestion" );
+
+			wp_mail( $correo, 'Caminos de las Sierras | Solicitud de Cambio de Medio de Pago en trámite', 'Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.' );
+
+			$form->success_message( 'Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.' );
 		} else {
 			$errors = $valid;
 			ob_start();

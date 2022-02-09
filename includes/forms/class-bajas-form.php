@@ -104,7 +104,18 @@ SQL,
 				)
 			);
 
-			$form->success_message( 'Tu solicitud de baja de dominio fue enviada.' );
+			$client_data    = API()->get_client_data();
+			$tipo_documento = $client_data['id_tipo_documento'];
+			$documento      = $client_data['documento'];
+			$correo         = $client_data['correo'];
+			$dominio        = $_POST['dominios'];
+			$fecha_gestion  = date( 'Ymdhis' );
+
+			TXT()->generate( 'Bajas', "$tipo_documento;$documento;$correo;$dominio;$gestion_id;$fecha_gestion" );
+
+			wp_mail( $correo, 'Caminos de las Sierras | Solicitud de Baja en trámite', "Su solicitud de baja de dominio (<b>$dominio</b>) fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada." );
+
+			$form->success_message( 'Su solicitud de baja de dominio fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada.' );
 		} else {
 			$errors = $valid;
 			ob_start();

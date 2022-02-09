@@ -39,7 +39,7 @@ MSG
 
 		?>
 
-		<section class="cdls-form">
+		<section class="cdls-form login">
 			<section class="section">
 				<h1>Iniciar Sesión</h1>
 				<section class="fields">
@@ -48,7 +48,7 @@ MSG
 				// type(.*) => name,label,value,id.
 				// keys must be unique, key must start with type, then it can be anything, ex. text2.
 				$array = array(
-					'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico"',
+					'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico" style="margin-bottom:1rem;"',
 					'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
 					'submit'   => 'login,,Ingresar,login',
 				);

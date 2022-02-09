@@ -299,6 +299,25 @@ class Perfil_Form {
 				)
 			);
 
+			$client_data         = API()->get_client_data();
+			$tipo_documento      = $client_data['id_tipo_documento'];
+			$documento           = $client_data['documento'];
+			$correo              = $client_data['correo'];
+			$fecha_modificacion  = date( 'Ymdhis' );
+			$apellido            = $tipo_documento == 2 ? $client_data['razon_social'] : $client_data['apellido'];
+			$nombre              = $tipo_documento == 5 ? $client_data['nombre'] : '';
+			$telefono            = $client_data['telefono'];
+			$calle               = $client_data['calle'];
+			$nro_calle           = $client_data['nro_calle'];
+			$piso                = $client_data['piso'];
+			$departamento        = $client_data['departamento'];
+			$id_localidad        = $client_data['id_localidad'];
+			$id_provincia        = $client_data['id_provincia'];
+			$codigo_postal       = $client_data['codigo_postal'];
+			$id_condicion_fiscal = $client_data['id_condicion_fiscal'];
+
+			TXT()->generate( 'Datos', "$tipo_documento;$documento;$correo;$apellido;$nombre;$telefono;$calle;$nro_calle;$piso;$departamento;$id_localidad;$id_provincia;$codigo_postal;$id_condicion_fiscal;$fecha_modificacion" );
+
 			$form->success_message( 'Tu información ha sido actualizada.' );
 		} else {
 			$errors = $valid;
