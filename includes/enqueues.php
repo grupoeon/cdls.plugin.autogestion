@@ -17,17 +17,17 @@ add_action(
 		}
 
 		wp_enqueue_style(
-			TEXT_DOMAIN . '-bootstrap',
-			'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
+			TEXT_DOMAIN,
+			plugins_url( 'public/autogestion.css', ROOT_FILE ),
 			null,
-			VERSION
+			DEBUG ? wp_rand( 0, PHP_INT_MAX ) : VERSION
 		);
 
 		wp_enqueue_script(
-			TEXT_DOMAIN . '-bootstrap',
-			'https://dn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',
+			TEXT_DOMAIN,
+			plugins_url( 'public/autogestion.js', ROOT_FILE ),
 			null,
-			VERSION,
+			DEBUG ? wp_rand( 0, PHP_INT_MAX ) : VERSION,
 			true
 		);
 

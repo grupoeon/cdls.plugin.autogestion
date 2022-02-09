@@ -27,6 +27,16 @@ class Iniciar_Sesion_Form {
 			$form->error_message( 'Por favor, iniciá sesión para poder acceder a los servicios de autogestión.' );
 		}
 
+		$form->warning_message(
+			<<<MSG
+Para iniciar sesión primero debés registrarte. Si aún no lo hiciste, podés hacerlo de dos maneras:
+<ol>
+<li>Si es tu <b>primera vez utilizando la autogestión</b>, podés registrarte <a href="/autogestion/registrarse"><b>desde aquí</b></a>.</li>
+<li>Si <b>alguna vez registraste un vehículo</b> con nosotros, recuperá tu contraseña <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.</li>
+</ol>
+MSG
+		);
+
 		// type(.*) => name,label,value,id.
 		// keys must be unique, key must start with type, then it can be anything, ex. text2.
 		$array = array(

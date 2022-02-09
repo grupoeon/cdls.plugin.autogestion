@@ -76,7 +76,7 @@ class Database_Controller {
 	 */
 	public function get_client_id_by_email( $email ) {
 		$db   = $this->db();
-		$stmt = $db->prepare( 'SELECT id from clientes WHERE correo = :correo' );
+		$stmt = $db->prepare( 'SELECT id FROM clientes WHERE correo = :correo' );
 		$stmt->execute( array( 'correo' => $email ) );
 		return $stmt->fetchColumn();
 	}
@@ -90,9 +90,101 @@ class Database_Controller {
 	 */
 	public function get_client_password_by_email( $email ) {
 		$db   = $this->db();
-		$stmt = $db->prepare( 'SELECT contrasena from clientes WHERE correo = :correo' );
+		$stmt = $db->prepare( 'SELECT contrasena FROM clientes WHERE correo = :correo' );
 		$stmt->execute( array( 'correo' => $email ) );
 		return $stmt->fetchColumn();
+	}
+
+	/**
+	 * Returns the available document types.
+	 *
+	 * @return array
+	 */
+	public function get_document_types() {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM _tipos_documento' );
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the available provinces.
+	 *
+	 * @return array
+	 */
+	public function get_provinces() {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM _provincias' );
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the available cities.
+	 *
+	 * @return array
+	 */
+	public function get_cities() {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM _localidades' );
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the available fiscal conditions.
+	 *
+	 * @return array
+	 */
+	public function get_fiscal_conditions() {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM _condiciones_fiscales' );
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the available vehicle categories.
+	 *
+	 * @param boolean $no_bikes Wether or not to include the bike category.
+	 * @return array
+	 */
+	public function get_vehicle_categories( $no_bikes = true ) {
+		$db   = $this->db();
+		$stmt = $db->prepare(
+			'SELECT * FROM _categorias_vehiculo' . ( $no_bikes ? ' WHERE id > 1' : '' )
+		);
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the available payment methods.
+	 *
+	 * @param boolean $types Filter by payment types.
+	 * @return array
+	 */
+	public function get_payment_methods( $types = array() ) {
+		$db   = $this->db();
+		$stmt = $db->prepare(
+			'SELECT * FROM _medios_de_pago'
+			. ( count( $types ) ? ' WHERE tipo_medio_pago IN (' . join( ',', $types ) . ')' : '' )
+		);
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the client data.
+	 *
+	 * @param int $client_id The client ID.
+	 * @return array
+	 */
+	public function get_client_data( $client_id ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM clientes WHERE id = :client_id' );
+		$stmt->execute( array( 'client_id' => $client_id ) );
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
 	}
 }
 

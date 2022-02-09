@@ -1,0 +1,106 @@
+.single-autogestion .cdls-form .section {
+  margin-bottom: 2rem;
+}
+
+.single-autogestion .cdls-form h1 {
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.single-autogestion .cdls-form .fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.single-autogestion .cdls-form .fields .mb-3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.single-autogestion .cdls-form .fields input[type="text"],
+.single-autogestion .cdls-form .fields input[type="number"],
+.single-autogestion .cdls-form .fields input[type="email"],
+.single-autogestion .cdls-form .fields select {
+  min-width: 15rem;
+  width: 15rem;
+  margin-left: 1rem;
+}
+
+.single-autogestion .cdls-form .fields input[type="checkbox"] {
+  margin-right: 1rem;
+}
+
+.single-autogestion .cdls-form .fields .mb-3 label {
+  line-height: 1.1em;
+}
+
+.single-autogestion .cdls-form .fields .vehicle-category {
+  grid-column: 1/3;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.single-autogestion .cdls-form .fields .vehicle-category input[type="radio"] {
+  margin-right: 1rem;
+}
+
+.single-autogestion .cdls-form .fields .submit {
+  grid-column: 1/3;
+}
+
+.single-autogestion .btn-primary {
+  background: #46af4c;
+  border: 1px solid #46af4c;
+}
+
+.single-autogestion .btn-primary:hover,
+.single-autogestion .btn-primary:focus,
+.single-autogestion .btn-primary:active {
+  background: #54d15b;
+  border: 1px solid #54d15b;
+}
+
+.single-autogestion .alert {
+  border-radius: 0;
+  border: 0;
+  border-left: 5px solid black;
+  font-size: 0.9em;
+}
+
+.single-autogestion .alert-dismissible .btn-close {
+  font-size: 0.6rem;
+  display: none;
+}
+
+.single-autogestion .alert {
+  padding: 1rem;
+  margin: 1rem 0;
+  line-height: 1.5em;
+}
+
+.single-autogestion .alert ol {
+  margin-bottom: 0;
+}
+
+.single-autogestion .alert-success {
+  background: #e8ffe9;
+  border-color: #46af4c;
+  color: #122f14;
+}
+
+.single-autogestion .alert-danger {
+  background: #ffeded;
+  border-color: #ff5564;
+  color: #4e2525;
+}
+
+.single-autogestion .alert-warning {
+  background: #fffaeb;
+  border-color: #f1c900;
+  color: #605000;
+}

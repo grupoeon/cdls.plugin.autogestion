@@ -70,6 +70,83 @@ class API_Controller {
 	}
 
 	/**
+	 * Returns all the client data.
+	 *
+	 * @param int $client_id The client id.
+	 * @return array
+	 */
+	public function get_client_data( $client_id = null ) {
+
+		session_start();
+
+		if ( empty( $client_id ) ) {
+			$client_id = $_SESSION['autogestion_id'];
+		}
+
+		if ( empty( $client_id ) ) {
+			return array();
+		}
+
+		return $this->rows_to_key_value( DB()->get_client_data( $client_id ) );
+	}
+
+	/**
+	 * Returns the available document types.
+	 *
+	 * @return array
+	 */
+	public function get_document_types() {
+		return $this->rows_to_key_value( DB()->get_document_types() );
+	}
+
+	/**
+	 * Returns the available provinces.
+	 *
+	 * @return array
+	 */
+	public function get_provinces() {
+		return $this->rows_to_key_value( DB()->get_provinces() );
+	}
+
+	/**
+	 * Returns the available cities.
+	 *
+	 * @return array
+	 */
+	public function get_cities() {
+		return $this->rows_to_key_value( DB()->get_cities() );
+	}
+
+	/**
+	 * Returns the available fiscal conditions.
+	 *
+	 * @return array
+	 */
+	public function get_fiscal_conditions() {
+		return $this->rows_to_key_value( DB()->get_fiscal_conditions() );
+	}
+
+	/**
+	 * Returns the available vehicle categories.
+	 *
+	 * @param boolean $no_bikes Ignore bike category.
+	 * @return array
+	 */
+	public function get_vehicle_categories( $no_bikes = true ) {
+		return DB()->get_vehicle_categories( $no_bikes );
+	}
+
+	/**
+	 * Returns the available payment methods.
+	 *
+	 * @param boolean $types Filter by payment types.
+	 * @return array
+	 */
+	public function get_payment_methods( $types = array() ) {
+		return $this->rows_to_key_value( DB()->get_payment_methods( $types ) );
+	}
+
+	/**
 	 * Returns a simulated API response (failure).
 	 *
 	 * @param string $message The message.
@@ -105,6 +182,22 @@ class API_Controller {
 				$data
 			),
 		);
+	}
+
+	/**
+	 * Transforms PDO fetchAll() associative array into key value pairs.
+	 *
+	 * @param Row[]  $rows Array of mysql rows.
+	 * @param string $key The column name to use as array key.
+	 * @param string $value The column name to use as array value.
+	 * @return array
+	 */
+	private function rows_to_key_value( $rows, $key = 'id', $value = 'nombre' ) {
+		$results = array();
+		foreach ( $rows as $row ) {
+			$results[ $row[ $key ] ] = $row[ $value ];
+		}
+		return $results;
 	}
 
 }
