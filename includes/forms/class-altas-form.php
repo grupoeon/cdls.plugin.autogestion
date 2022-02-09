@@ -26,139 +26,9 @@ class Altas_Form {
 
 		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
 
-		?>
-		<section class="section">
-			<h1>Datos del usuario</h1>
-			<section class="fields">
-			<?php
-
-			$form->select(
-				array(
-					'name'     => 'document_type',
-					'label'    => 'Tipo de Documento',
-					'options'  => API()->get_document_types(),
-					'selected' => 'Seleccione',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'  => 'document_number',
-					'label' => 'Número de Documento',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'name',
-					'label' => 'Nombre',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'last_name',
-					'label' => 'Apellido',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'company_name',
-					'label' => 'Razón Social',
-				)
-			);
-
-			$form->select(
-				array(
-					'name'     => 'fiscal_condition',
-					'label'    => 'Condición Fiscal',
-					'options'  => API()->get_fiscal_conditions(),
-					'selected' => 'Seleccione',
-				)
-			);
-
-			$form->email(
-				array(
-					'name'  => 'email',
-					'label' => 'Correo electrónico',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'  => 'phone',
-					'label' => 'Teléfono particular',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'street',
-					'label' => 'Calle',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'street_number',
-					'label' => 'Nro. Calle',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'floor',
-					'label' => 'Piso',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'apartment',
-					'label' => 'Departamento',
-				)
-			);
-
-			$form->select(
-				array(
-					'name'     => 'province',
-					'label'    => 'Provincia',
-					'options'  => API()->get_provinces(),
-					'selected' => 'Seleccione',
-				)
-			);
-
-			$form->select(
-				array(
-					'name'     => 'city',
-					'label'    => 'Localidad',
-					'options'  => API()->get_cities(),
-					'selected' => 'Seleccione',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'postcode',
-					'label' => 'Código Postal',
-				)
-			);
-
-			$form->checkbox(
-				array(
-					'name'     => 'terms',
-					'value'    => 1,
-					'selected' => true,
-					'label'    => 'Acepto los <a 
-                                                href="/terminos-y-condiciones-patente/" 
-                                                target="_blank">términos y condiciones</a>.',
-				)
-			);
+		if ( API()->is_client_data_complete() === true ) :
 
 			?>
-			</section>
-		</section>
 		<section class="section">
 			<h1>Datos del vehículo</h1>
 			<section class="fields">
@@ -166,29 +36,32 @@ class Altas_Form {
 
 			$form->text(
 				array(
-					'name'  => 'vehicle_brand',
+					'name'  => 'marca',
 					'label' => 'Marca',
 				)
 			);
 
 			$form->text(
 				array(
-					'name'  => 'vehicle_model',
+					'name'  => 'modelo',
 					'label' => 'Modelo',
 				)
 			);
 
 			$form->text(
 				array(
-					'name'  => 'vehicle_domain',
-					'label' => 'Dominio',
+					'name'   => 'dominio',
+					'label'  => 'Dominio',
+					'string' => 'placeholder="ej. AA000AA ó AAA000"',
 				)
 			);
 
 			$form->text(
 				array(
-					'name'  => 'vehicle_domain_confirm',
-					'label' => 'Dominio (confirmar)',
+					'name'   => 'dominio_confirmar',
+					'label'  => 'Dominio (confirmar)',
+					'string' => 'placeholder="ej. AA000AA ó AAA000"',
+
 				)
 			);
 
@@ -205,7 +78,7 @@ class Altas_Form {
 
 					$form->radio(
 						array(
-							'name'  => 'vehicle_category',
+							'name'  => 'id_categoria',
 							'label' => "<b>$name</b>
 											<img 
 												src='/wp-content/uploads/vehicle_categories/$value.jpg' 
@@ -229,7 +102,7 @@ class Altas_Form {
 
 			$form->select(
 				array(
-					'name'     => 'payment_type',
+					'name'     => 'id_medio_de_pago',
 					'label'    => 'Medio de Pago',
 					'options'  => API()->get_payment_methods( array( 1, 2 ) ),
 					'selected' => 'Seleccione',
@@ -238,35 +111,35 @@ class Altas_Form {
 
 			$form->text(
 				array(
-					'name'  => 'payment_name',
+					'name'  => 'nombre',
 					'label' => 'Nombre del Titular',
 				)
 			);
 
 			$form->number(
 				array(
-					'name'  => 'payment_document_number',
+					'name'  => 'documento',
 					'label' => 'DNI/CUIT del Titular',
 				)
 			);
 
 			$form->number(
 				array(
-					'name'  => 'payment_card_number',
+					'name'  => 'nro_tarjeta',
 					'label' => 'Número de la tarjeta',
 				)
 			);
 
 			$form->number(
 				array(
-					'name'  => 'payment_card_date',
+					'name'  => 'vencimiento_tarjeta',
 					'label' => 'Vencimiento de la tarjeta',
 				)
 			);
 
 			$form->number(
 				array(
-					'name'  => 'payment_cbu',
+					'name'  => 'nro_cbu',
 					'label' => 'Número de CBU',
 				)
 			);
@@ -275,7 +148,11 @@ class Altas_Form {
 			</section>
 			<?php $form->submit_button( 'Solicitar Alta' ); ?>
 		</section>
-		<?php
+			<?php
+
+		else :
+			$form->error_message( 'Debés completar los datos de tu perfil antes de dar de alta un vehículo. <a href="/autogestion/mi-perfil"><b>Ver perfil</b></a>.' );
+		endif;
 
 		$form->close();
 
@@ -290,12 +167,123 @@ class Altas_Form {
 	 */
 	public static function on_submit( $form ) {
 
-		$rules = array(
-			'email'    => array( 'Correo electrónico', 'required' ),
-			'password' => array( 'Contraseña', 'required' ),
+		\Valitron\Validator::lang( 'es' );
+		$v = new \Valitron\Validator( $_POST );
+
+		$v->rules(
+			array(
+				'required'      => array(
+					'dominio',
+					'marca',
+					'modelo',
+					'dominio_confirmar',
+					'id_categoria',
+				),
+				'in'            => array(
+					array( 'id_categoria', array( 2, 3, 4, 5, 6, 7 ) ),
+					array( 'id_medio_de_pago', array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) ),
+				),
+				'domain'        => array( 'dominio', 'dominio_confirmar' ),
+				'alphaNum'      => array( 'marca', 'modelo' ),
+				'numeric'       => array( 'documento' ),
+				'lengthBetween' => array(
+					array( 'documento', 7, 11 ),
+				),
+				'lengthMax'     => array(
+					array( 'nombre', 50 ),
+				),
+				'creditCard'    => array(
+					array( 'nro_tarjeta' ),
+				),
+				'length'        => array(
+					array( 'vencimiento_tarjeta', 6 ),
+					array( 'nro_cbu', 22 ),
+				),
+				'equals'        => array(
+					array( 'dominio', 'dominio_confirmar' ),
+				),
+
+			)
 		);
 
-		$data = $form->fastpost( $rules );
+		$v->labels(
+			array(
+				'id_medio_de_pago'  => 'Medio de Pago',
+				'dominio_confirmar' => 'Dominio (confirmar)',
+			)
+		);
+
+		$valid = $v->validate() ? true : $v->errors();
+
+		if ( $valid === true ) {
+			$gestion_id = DB()->insert(
+				<<<SQL
+					INSERT INTO gestiones ( id_tipo_gestion, estado_gestion, ip_gestion ) 
+					VALUES ('1', '1', :ip);
+
+SQL,
+				array(
+					'ip' => $_SERVER['REMOTE_ADDR'],
+				)
+			);
+
+			DB()->insert(
+				<<<SQL
+					INSERT INTO gestiones_altas (
+						nro_gestion,
+						id_cliente,
+						dominio,
+						marca,
+						modelo,
+						id_categoria,
+						id_medio_de_pago,
+						nro_medio_de_pago,
+						vencimiento_tarjeta,
+						nombre_medio_de_pago,
+						documento_medio_de_pago  )
+					VALUES (
+						:nro_gestion,
+						:id_cliente,
+						:dominio,
+						:marca,
+						:modelo,
+						:id_categoria,
+						:id_medio_de_pago,
+						:nro_medio_de_pago,
+						:vencimiento_tarjeta,
+						:nombre_medio_de_pago,
+						:documento_medio_de_pago
+					);
+
+			SQL,
+				array(
+					'nro_gestion'             => $gestion_id,
+					'id_cliente'              => API()->client_id(),
+					'dominio'                 => $_POST['dominio'],
+					'marca'                   => $_POST['marca'],
+					'modelo'                  => $_POST['modelo'],
+					'id_categoria'            => $_POST['id_categoria'],
+					'id_medio_de_pago'        => $_POST['id_medio_de_pago'],
+					'nro_medio_de_pago'       => $_POST['nro_tarjeta'] ? $_POST['nro_tarjeta'] : $_POST['nro_cbu'],
+					'vencimiento_tarjeta'     => $_POST['nro_tarjeta'] ? $_POST['vencimiento_tarjeta'] : null,
+					'nombre_medio_de_pago'    => $_POST['nombre'],
+					'documento_medio_de_pago' => $_POST['documento'],
+				)
+			);
+
+			$form->success_message( 'Tu solicitud de cambio de medio de pago fue enviada.' );
+		} else {
+			$errors = $valid;
+			ob_start();
+			foreach ( $errors as $error ) {
+				?>
+				<li><?php echo esc_html( $error[0] ); ?></li>
+				<?php
+			}
+			$error_messages = ob_get_clean();
+			$message        = "Revisa los siguientes errores: <ul>$error_messages</ul>";
+			$form->error_message( $message );
+		}
 
 	}
 

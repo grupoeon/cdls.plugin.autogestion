@@ -1,5 +1,6 @@
 {
     "require": {
-        "formr/formr": "^1.4"
+        "formr/formr": "^1.4",
+        "vlucas/valitron": "^1.4"
     }
 }

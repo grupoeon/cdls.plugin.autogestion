@@ -24,7 +24,7 @@ class Recuperar_Contrasena_Form {
 	 */
 	public static function build( $form ) {
 
-		$form->warning_message( 'Para recuperar tu contraseña necesitamos <b>verificar tu identidad</b>, ingresá el número de DNI/CUIT con el que te registraste y el dominio/patente de un vehículo que hayas registrado (no importa si fue dado de baja).' );
+		$form->warning_message( 'Para recuperar tu contraseña necesitamos <b>verificar tu identidad</b>.<br><br>Ingresá el <b>número de DNI/CUIT</b> con el que te registraste y el <b>dominio/patente</b> de un vehículo que hayas registrado (no importa si fue dado de baja).' );
 
 		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
 

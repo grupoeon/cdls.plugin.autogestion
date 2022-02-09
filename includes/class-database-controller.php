@@ -69,6 +69,62 @@ class Database_Controller {
 	}
 
 	/**
+	 * Returns the queries result.
+	 *
+	 * @return array
+	 */
+	public function fetchAll( $query, $parameters = array() ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( $query );
+		$stmt->execute( $parameters );
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	/**
+	 * Returns the queries result.
+	 *
+	 * @return array
+	 */
+	public function insert( $query, $parameters = array() ) {
+
+		$db   = $this->db();
+		$stmt = $db->prepare( $query );
+		$stmt->execute( $parameters );
+		return $db->lastInsertId();
+	}
+
+		/**
+		 * Returns the queries result.
+		 *
+		 * @return array
+		 */
+	public function error() {
+		$db = $this->db();
+		return $db->errorInfo();
+	}
+
+	/**
+	 * Returns the queries result.
+	 *
+	 * @return array
+	 */
+	public function query( $query, $parameters = array() ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( $query );
+		$stmt->execute( $parameters );
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
+	public function get_client_number( $client_id ) {
+
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT nro_cliente FROM clientes WHERE id = :id' );
+		$stmt->execute( array( 'id' => $client_id ) );
+		return $stmt->fetchColumn();
+
+	}
+
+	/**
 	 * Returns the client ID by email.
 	 *
 	 * @param string $email Email.
@@ -184,7 +240,7 @@ class Database_Controller {
 		$db   = $this->db();
 		$stmt = $db->prepare( 'SELECT * FROM clientes WHERE id = :client_id' );
 		$stmt->execute( array( 'client_id' => $client_id ) );
-		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+		return $stmt->fetch( \PDO::FETCH_ASSOC );
 	}
 }
 

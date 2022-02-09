@@ -26,10 +26,22 @@ class Bajas_Form {
 
 		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
 
+		$form->warning_message( 'Esta baja será efectiva una vez que reciba la confirmación definitiva por parte de Caminos de las Sierras SA. De no recibirla en 72 hs. hábiles por favor póngase en contacto con la Oficina de Atención al Usuario de Caminos de las Sierras.' );
+
 		?>
 		<section class="section">
 			<h1>Datos de la baja</h1>
 			<section class="fields">
+				<?php
+					$form->select(
+						array(
+							'name'     => 'dominios',
+							'label'    => 'Dominio',
+							'options'  => API()->get_baja_vehicles(),
+							'selected' => 'Seleccione',
+						)
+					);
+				?>
 			</section>
 			<?php $form->submit_button( 'Solicitar Baja' ); ?>
 		</section>
@@ -48,12 +60,63 @@ class Bajas_Form {
 	 */
 	public static function on_submit( $form ) {
 
-		$rules = array(
-			'email'    => array( 'Correo electrónico', 'required' ),
-			'password' => array( 'Contraseña', 'required' ),
+		\Valitron\Validator::lang( 'es' );
+		$v = new \Valitron\Validator( $_POST );
+
+		$v->rules(
+			array(
+				'required'    => array( 'dominios' ),
+				'domainBajas' => array( 'dominios' ),
+			)
 		);
 
-		$data = $form->fastpost( $rules );
+		$valid = $v->validate() ? true : $v->errors();
+
+		if ( $valid === true ) {
+			$gestion_id = DB()->insert(
+				<<<SQL
+					INSERT INTO gestiones ( id_tipo_gestion, estado_gestion, ip_gestion ) 
+					VALUES ('2', '1', :ip);
+
+SQL,
+				array(
+					'ip' => $_SERVER['REMOTE_ADDR'],
+				)
+			);
+
+			DB()->insert(
+				<<<SQL
+					INSERT INTO gestiones_bajas ( 
+						nro_gestion, 
+						nro_cliente,
+						dominio ) 
+					VALUES (
+						:nro_gestion, 
+						:nro_cliente,
+						:dominio
+					)
+
+SQL,
+				array(
+					'nro_gestion' => $gestion_id,
+					'nro_cliente' => API()->client_number(),
+					'dominio'     => $_POST['dominios'],
+				)
+			);
+
+			$form->success_message( 'Tu solicitud de baja de dominio fue enviada.' );
+		} else {
+			$errors = $valid;
+			ob_start();
+			foreach ( $errors as $error ) {
+				?>
+				<li><?php echo esc_html( $error[0] ); ?></li>
+				<?php
+			}
+			$error_messages = ob_get_clean();
+			$message        = "Revisa los siguientes errores: <ul>$error_messages</ul>";
+			$form->error_message( $message );
+		}
 
 	}
 

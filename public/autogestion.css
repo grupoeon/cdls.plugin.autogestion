@@ -83,7 +83,8 @@
   line-height: 1.5em;
 }
 
-.single-autogestion .alert ol {
+.single-autogestion .alert ol,
+.single-autogestion .alert ul {
   margin-bottom: 0;
 }
 

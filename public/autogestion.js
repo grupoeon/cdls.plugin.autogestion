@@ -1,16 +1,19 @@
 (() => {
   const conditionField = (conditioner, conditionees) => {
     conditioner = document.querySelector(conditioner);
+    if (!conditioner) return;
 
     const show = (selector) => {
       document
         .querySelector(selector)
         .closest(".fields > div")
         .style.removeProperty("display");
+      document.querySelector(selector).removeAttribute("disabled");
     };
     const hide = (selector) => {
       document.querySelector(selector).closest(".fields > div").style.display =
         "none";
+      document.querySelector(selector).setAttribute("disabled", true);
     };
 
     const conditionate = () => {
@@ -36,14 +39,14 @@
   };
 
   window.addEventListener("load", () => {
-    conditionField("[name=document_type]", {
-      5: ["[name=name]", "[name=last_name]"],
-      2: ["[name=company_name]"],
+    conditionField("[name=id_tipo_documento]", {
+      5: ["[name=nombre]", "[name=apellido]"],
+      2: ["[name=razon_social]"],
     });
 
-    conditionField("[name=payment_type]", {
-      9: ["[name=payment_cbu]"],
-      else: ["[name=payment_card_number]", "[name=payment_card_date]"],
+    conditionField("[name=id_medio_de_pago]", {
+      9: ["[name=nro_cbu]"],
+      else: ["[name=nro_tarjeta]", "[name=vencimiento_tarjeta]"],
     });
   });
 })();

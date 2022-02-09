@@ -63,3 +63,32 @@ add_shortcode(
 
 	}
 );
+
+\Valitron\Validator::addRule(
+	'fiscalCondition',
+	function( $field, $value, array $params, array $fields ) {
+		if ( $fields['id_tipo_documento'] == 5 ) {
+			return in_array( $value, array( 1 ) );
+		} else {
+			return in_array( $value, array( 2, 3, 5 ) );
+		}
+		return false;
+	},
+	'es incorrecta para ese tipo de documento.'
+);
+
+\Valitron\Validator::addRule(
+	'domain',
+	function( $field, $value, array $params, array $fields ) {
+		return preg_match( '/\w{2}\d{3}\w{2}|\w{3}\d{3}/', $value );
+	},
+	'tiene un formato incorrecto. Formato: AA000AA ó AAA000.'
+);
+
+\Valitron\Validator::addRule(
+	'domainBajas',
+	function( $field, $value, array $params, array $fields ) {
+		return preg_match( '/\w{2}\d{3}\w{2}|\w{3}\d{3}|\d{3}\w{3}|\w\d{3}\w{3}/', $value );
+	},
+	'tiene un formato incorrecto.'
+);

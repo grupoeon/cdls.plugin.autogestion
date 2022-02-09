@@ -31,21 +31,35 @@ class Iniciar_Sesion_Form {
 			<<<MSG
 Para iniciar sesión primero debés registrarte. Si aún no lo hiciste, podés hacerlo de dos maneras:
 <ol>
-<li>Si es tu <b>primera vez utilizando la autogestión</b>, podés registrarte <a href="/autogestion/registrarse"><b>desde aquí</b></a>.</li>
-<li>Si <b>alguna vez registraste un vehículo</b> con nosotros, recuperá tu contraseña <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.</li>
+<li>Si <b>aún no sos cliente nuestro</b> y querés registrar tu primer vehículo, <a href="/autogestion/registrarse"><b>registrate desde aquí</b></a>.</li>
+<li>Si <b>sos cliente y tenés vehículos registrados</b> con nosotros, recuperá tu contraseña <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.</li>
 </ol>
 MSG
 		);
 
-		// type(.*) => name,label,value,id.
-		// keys must be unique, key must start with type, then it can be anything, ex. text2.
-		$array = array(
-			'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico"',
-			'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
-			'submit'   => 'login,,Ingresar,login',
-		);
+		?>
 
-		$form->fastform( $array );
+		<section class="cdls-form">
+			<section class="section">
+				<h1>Iniciar Sesión</h1>
+				<section class="fields">
+				<?php
+
+				// type(.*) => name,label,value,id.
+				// keys must be unique, key must start with type, then it can be anything, ex. text2.
+				$array = array(
+					'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico"',
+					'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
+					'submit'   => 'login,,Ingresar,login',
+				);
+
+				$form->fastform( $array );
+
+				?>
+				</section>
+			</section>
+		</section>
+		<?php
 
 	}
 

@@ -10,6 +10,20 @@ class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
         '5640faacc2b60a961e5376b0effdd7ef' => __DIR__ . '/..' . '/formr/formr/class.formr.php',
     );
 
+    public static $prefixLengthsPsr4 = array (
+        'V' => 
+        array (
+            'Valitron\\' => 9,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Valitron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -17,6 +31,8 @@ class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203::$classMap;
 
         }, null, ClassLoader::class);

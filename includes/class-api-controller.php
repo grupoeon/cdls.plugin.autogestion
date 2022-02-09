@@ -64,7 +64,7 @@ class API_Controller {
 		if ( ! empty( $client_id ) && password_verify( $password, $password_hash ) ) {
 			return $this->success( 'Iniciaste sesión correctamente.', array( 'id' => $client_id ) );
 		} else {
-			return $this->error( 'El usuario o la contraseña son incorrectos.' );
+			return $this->error( 'El usuario o la contraseña son incorrectos. Recordá que las contraseñas del sistema de autogestión anterior no funcionan, podés <b>recuperar tu contraseña</b> <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.' );
 		}
 
 	}
@@ -87,7 +87,128 @@ class API_Controller {
 			return array();
 		}
 
-		return $this->rows_to_key_value( DB()->get_client_data( $client_id ) );
+		return DB()->get_client_data( $client_id );
+
+	}
+
+	/**
+	 * Returns client id $_SESSION.
+	 *
+	 * @return array
+	 */
+	public function client_id() {
+
+		session_start();
+
+		return $_SESSION['autogestion_id'];
+
+	}
+
+	/**
+	 * Returns client number.
+	 *
+	 * @return array
+	 */
+	public function client_number() {
+
+		$client_id = $this->client_id();
+		return DB()->get_client_number( $client_id );
+
+	}
+
+	public function get_baja_vehicles() {
+
+		return $this->rows_to_key_value(
+			DB()->fetchAll(
+				<<<SQL
+			SELECT id,dominio FROM vehiculos 
+				WHERE id_estado_vehiculo IN (1,2,3,5) 
+				AND nro_cliente = :nro_cliente;
+SQL
+				,
+				array(
+					'nro_cliente' => API()->client_number(),
+				)
+			),
+			'dominio',
+			'dominio'
+		);
+
+	}
+
+	/**
+	 * Checks if client data is complete.
+	 *
+	 * @return true|array
+	 */
+	public function is_client_data_complete( $client_id = null ) {
+
+		session_start();
+
+		if ( empty( $client_id ) ) {
+			$client_id = $_SESSION['autogestion_id'];
+		}
+
+		if ( empty( $client_id ) ) {
+			return false;
+		}
+
+		$client_data = $this->get_client_data( $client_id );
+
+		\Valitron\Validator::lang( 'es' );
+		$v = new \Valitron\Validator( $client_data );
+
+		$v->rules(
+			array(
+				'required'        => array(
+					'id_tipo_documento',
+					'id_provincia',
+					'id_localidad',
+				),
+				'in'              => array(
+					array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
+					array( 'id_provincia', array_keys( API()->get_provinces() ) ),
+					array( 'id_localidad', array_keys( API()->get_cities() ) ),
+				),
+				'numeric'         => array( 'documento', 'telefono', 'nro_calle' ),
+				'optional'        => array( 'nro_calle', 'piso', 'departamento' ),
+				'lengthBetween'   => array(
+					array( 'documento', 7, 11 ),
+				),
+				'fiscalCondition' => array( 'id_condicion_fiscal' ),
+				'email'           => array( 'correo' ),
+				'alpha'           => array(
+					'apellido',
+					'nombre',
+				),
+				'alphaNum'        => array(
+					'razon_social',
+				),
+				'lengthMax'       => array(
+					array( 'telefono', 10 ),
+					array( 'calle', 40 ),
+					array( 'nro_calle', 6 ),
+					array( 'piso', 3 ),
+					array( 'departamento', 3 ),
+					array( 'codigo_postal', 4 ),
+					array( 'apellido', 50 ),
+					array( 'nombre', 50 ),
+					array( 'razon_social', 80 ),
+				),
+
+			)
+		);
+
+		$v->labels(
+			array(
+				'id_tipo_documento'   => 'Tipo de Documento',
+				'documento'           => 'Número de Documento',
+				'id_condicion_fiscal' => 'Condición Fiscal',
+			)
+		);
+
+		return $v->validate() ? true : $v->errors();
+
 	}
 
 	/**

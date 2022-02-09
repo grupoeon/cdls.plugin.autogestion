@@ -16,12 +16,14 @@ session_start();
  */
 class Autogestion_Controller {
 
-	const LOGIN_FORM_ID           = 3354;
-	const LOGIN_FORM_MENU_ID      = 3377;
-	const LOGOUT_FORM_MENU_ID     = 3419;
-	const FORGOT_PASSWORD_FORM_ID = 3367;
-	const PROFILE_FORM_ID         = 3368;
-	const MENU_ID                 = 13;
+	const LOGIN_FORM_ID            = 3354;
+	const LOGIN_FORM_MENU_ID       = 3377;
+	const LOGOUT_FORM_MENU_ID      = 3419;
+	const FORGOT_PASSWORD_FORM_ID  = 3367;
+	const PROFILE_FORM_ID          = 3368;
+	const RECOVER_PASSWORD_FORM_ID = 3753;
+	const REGISTER_FORM_ID         = 3750;
+	const MENU_ID                  = 13;
 
 	/**
 	 * The single instance of the class.
@@ -129,6 +131,8 @@ class Autogestion_Controller {
 			array(
 				self::LOGIN_FORM_ID,
 				self::FORGOT_PASSWORD_FORM_ID,
+				self::RECOVER_PASSWORD_FORM_ID,
+				self::REGISTER_FORM_ID,
 			),
 			true
 		) ) {
