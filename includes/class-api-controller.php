@@ -177,12 +177,10 @@ SQL
 				),
 				'fiscalCondition' => array( 'id_condicion_fiscal' ),
 				'email'           => array( 'correo' ),
-				'alpha'           => array(
-					'apellido',
-					'nombre',
-				),
-				'alphaNum'        => array(
-					'razon_social',
+				'regex'           => array(
+					array( 'nombre', "/[\w \.']+/" ),
+					array( 'apellido', "/[\w \.']+/" ),
+					array( 'razon_social', "/[\w \.\d']+/" ),
 				),
 				'lengthMax'       => array(
 					array( 'telefono', 10 ),

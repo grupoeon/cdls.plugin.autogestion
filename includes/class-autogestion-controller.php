@@ -23,6 +23,8 @@ class Autogestion_Controller {
 	const PROFILE_FORM_ID          = 3368;
 	const RECOVER_PASSWORD_FORM_ID = 3753;
 	const REGISTER_FORM_ID         = 3750;
+	const PAYMENT_FORM_ID          = 3372;
+	const BAJAS_FORM_ID            = 3373;
 	const MENU_ID                  = 13;
 
 	/**
@@ -174,6 +176,10 @@ class Autogestion_Controller {
 				}
 
 				if ( self::LOGOUT_FORM_MENU_ID === $menu_item->ID && ! AG()->is_client_logged_in() ) {
+					return false;
+				}
+
+				if ( in_array( $menu_item->ID, array( self::PAYMENT_FORM_ID, self::BAJAS_FORM_ID ) ) && empty( API()->client_number() ) ) {
 					return false;
 				}
 

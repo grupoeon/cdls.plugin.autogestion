@@ -85,6 +85,31 @@ class Database_Controller {
 	 *
 	 * @return array
 	 */
+	public function document_exists( $document ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM clientes WHERE documento = :documento' );
+		$stmt->execute( array( 'documento' => $document ) );
+		return (bool) $stmt->fetchColumn();
+	}
+
+
+		/**
+		 * Returns the queries result.
+		 *
+		 * @return array
+		 */
+	public function email_exists( $email ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM clientes WHERE correo = :correo' );
+		$stmt->execute( array( 'correo' => $email ) );
+		return (bool) $stmt->fetchColumn();
+	}
+
+	/**
+	 * Returns the queries result.
+	 *
+	 * @return array
+	 */
 	public function insert( $query, $parameters = array() ) {
 
 		$db   = $this->db();

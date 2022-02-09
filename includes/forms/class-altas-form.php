@@ -192,8 +192,8 @@ class Altas_Form {
 				'lengthMax'     => array(
 					array( 'nombre', 50 ),
 				),
-				'creditCard'    => array(
-					array( 'nro_tarjeta' ),
+				'lengthBetween' => array(
+					array( 'nro_tarjeta', 14, 16 ),
 				),
 				'length'        => array(
 					array( 'vencimiento_tarjeta', 6 ),
