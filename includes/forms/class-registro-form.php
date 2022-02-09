@@ -24,6 +24,8 @@ class Registro_Form {
 	 */
 	public static function build( $form ) {
 
+		$form->required = '(nro_calle),(piso),(departamento)';
+
 		$form->warning_message( 'Recordá que si ya completaste estos datos alguna vez y/o diste de alta un vehículo anteriormente podés <b>recuperar tu contraseña</b> <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.' );
 
 		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
@@ -230,7 +232,7 @@ class Registro_Form {
 
 		if ( $valid === true ) {
 
-			$password = 'pepe';
+			$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
 			$hash     = password_hash( $password, PASSWORD_DEFAULT );
 
 			DB()->query(
@@ -299,7 +301,10 @@ class Registro_Form {
 				<<<MAIL
 				Bienvenido.
 
-				Nos es grato comunicarle que la clave para poder ingresar a la sección autogestión del sitio https://www.caminosdelassierras.com.ar/autogestion/iniciar-sesion es <b>$password</b>.
+				Nos es grato comunicarle que la clave para poder ingresar a la sección autogestión del sitio https://www.caminosdelassierras.com.ar/autogestion/iniciar-sesion es:<br>
+				<br>
+				
+				<h1><b>$password</b></h1>
 				
 				Si el enlace proporcionado no funciona copielo y pegelo en su barra de navegación.
 				

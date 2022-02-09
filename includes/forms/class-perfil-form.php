@@ -24,6 +24,8 @@ class Perfil_Form {
 	 */
 	public static function build( $form ) {
 
+		$form->required = '(nro_calle),(piso),(departamento)';
+
 		$client_data = API()->get_client_data();
 
 		$complete_data = API()->is_client_data_complete();
@@ -237,6 +239,20 @@ class Perfil_Form {
 			)
 		);
 
+		$v->rule(
+			function( $field, $value, $params, $fields ) {
+				return ! DB()->document_exists( $_POST['documento'], API()->client_id() );
+			},
+			'documento'
+		)->message( 'El documento pertenece a un usuario registrado, deberá iniciar sesión.' );
+
+		$v->rule(
+			function( $field, $value, $params, $fields ) {
+				return ! DB()->email_exists( $_POST['correo'], API()->client_id() );
+			},
+			'correo'
+		)->message( 'El correo electrónico pertenece a una cuenta ya registrada, deberá ingresar otro correo electrónico.' );
+
 		$v->labels(
 			array(
 				'id_tipo_documento'   => 'Tipo de Documento',
@@ -263,9 +279,10 @@ class Perfil_Form {
 					codigo_postal = :codigo_postal,
 					id_provincia = :id_provincia,
 					id_localidad = :id_localidad,
-					id_condicion_fiscal = :id_condicion_fiscal,
+					id_condicion_fiscal = :id_condicion_fiscal
 				WHERE id = :id_cliente',
 				array(
+					'id_cliente'          => API()->client_id(),
 					'apellido'            => $_POST['apellido'],
 					'nombre'              => $_POST['nombre'],
 					'razon_social'        => $_POST['razon_social'],
@@ -281,6 +298,7 @@ class Perfil_Form {
 					'id_condicion_fiscal' => $_POST['id_condicion_fiscal'],
 				)
 			);
+
 			$form->success_message( 'Tu información ha sido actualizada.' );
 		} else {
 			$errors = $valid;

@@ -85,24 +85,60 @@ class Database_Controller {
 	 *
 	 * @return array
 	 */
-	public function document_exists( $document ) {
-		$db   = $this->db();
-		$stmt = $db->prepare( 'SELECT COUNT(*) FROM clientes WHERE documento = :documento' );
-		$stmt->execute( array( 'documento' => $document ) );
+	public function document_exists( $document, $client_id = null ) {
+		$db  = $this->db();
+		$sql = 'SELECT COUNT(*) FROM clientes WHERE documento = :documento';
+		if ( $client_id ) {
+			$sql .= ' AND id != :client_id';
+		}
+		$stmt = $db->prepare( $sql );
+		$stmt->execute(
+			array(
+				'documento' => $document,
+				'client_id' => $client_id,
+			)
+		);
 		return (bool) $stmt->fetchColumn();
 	}
 
 
-		/**
-		 * Returns the queries result.
-		 *
-		 * @return array
-		 */
-	public function email_exists( $email ) {
-		$db   = $this->db();
-		$stmt = $db->prepare( 'SELECT COUNT(*) FROM clientes WHERE correo = :correo' );
-		$stmt->execute( array( 'correo' => $email ) );
+	/**
+	 * Returns the queries result.
+	 *
+	 * @return array
+	 */
+	public function email_exists( $email, $client_id = null ) {
+		$db  = $this->db();
+		$sql = 'SELECT COUNT(*) FROM clientes WHERE correo = :correo';
+		if ( $client_id ) {
+			$sql .= ' AND id != :client_id';
+		}
+		$stmt = $db->prepare( $sql );
+		$stmt->execute(
+			array(
+				'correo'    => $email,
+				'client_id' => $client_id,
+			)
+		);
 		return (bool) $stmt->fetchColumn();
+	}
+
+	/**
+	 * Returns the queries result.
+	 *
+	 * @return int
+	 */
+	public function verify_identity( $document, $domain ) {
+		$db   = $this->db();
+		$sql  = 'SELECT clientes.id FROM clientes JOIN vehiculos ON clientes.nro_cliente = vehiculos.nro_cliente WHERE clientes.documento = :documento AND vehiculos.dominio = :dominio';
+		$stmt = $db->prepare( $sql );
+		$stmt->execute(
+			array(
+				'documento' => $document,
+				'dominio'   => $domain,
+			)
+		);
+		return (int) $stmt->fetchColumn();
 	}
 
 	/**
