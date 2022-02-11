@@ -14,7 +14,7 @@ require_once ROOT_DIR . '/includes/abstract-class-form.php';
 
 class Form_Controller {
 
-	const FORM_HANDLER_ID = 'clds_form_id';
+	const FORM_HANDLER_ID = 'cdls_form_id';
 
 	const ALLOWED_FORM_HANDLERS = array(
 		'iniciar-sesion'       => __NAMESPACE__ . '\Iniciar_Sesion_Form',
@@ -90,6 +90,7 @@ class Form_Controller {
 				}
 
 				$handler->submit();
+
 			}
 		}
 	}
@@ -150,6 +151,8 @@ class Form_Controller {
 
 		$form->action   = '';
 		$form->required = '*';
+		$form->id       = $handler_id;
+		$form->name     = $handler_id;
 
 		if ( $cdls_submitted_form_handler_id === $handler_id ) {
 			$handler = $cdls_submitted_form_handler;

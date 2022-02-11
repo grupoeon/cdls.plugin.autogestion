@@ -42,6 +42,10 @@ class Iniciar_Sesion_Form extends Form {
 		$array = array(
 			'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico" style="margin-bottom:1rem;"',
 			'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
+			'hidden'   => array(
+				'name'  => 'cdls_form_id',
+				'value' => $this->form->id,
+			),
 			'submit'   => 'login,,Ingresar,login',
 		);
 
@@ -77,7 +81,8 @@ class Iniciar_Sesion_Form extends Form {
 	}
 
 	public function current_user_can_submit() {
-		return AG()->is_client_logged_in();
+		return true;
+		//return AG()->is_client_logged_in();
 	}
 
 }

@@ -45,10 +45,8 @@ abstract class Form {
 	}
 
 	public function messages() {
-		foreach ( (array) $this->messages as $messages ) {
-			foreach ( $messages as $message ) {
-				echo wp_kses_post( $message );
-			}
+		foreach ( (array) $this->messages as $message ) {
+			echo wp_kses_post( $message );
 		}
 	}
 
