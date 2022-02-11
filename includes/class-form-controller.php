@@ -18,7 +18,6 @@ class Form_Controller {
 
 	const ALLOWED_FORM_HANDLERS = array(
 		'iniciar-sesion'       => __NAMESPACE__ . '\Iniciar_Sesion_Form',
-		'cerrar-sesion'        => __NAMESPACE__ . '\Cerrar_Sesion_Form',
 		'olvide-contrasena'    => __NAMESPACE__ . '\Olvide_Contrasena_Form',
 		'perfil'               => __NAMESPACE__ . '\Perfil_Form',
 		'altas'                => __NAMESPACE__ . '\Altas_Form',
@@ -45,7 +44,7 @@ class Form_Controller {
 	}
 
 	public function init_hooks() {
-		add_action( 'init', array( $this, 'handle_submissions' ) );
+		add_action( 'template_redirect', array( $this, 'handle_submissions' ) );
 		add_shortcode( 'cdls_form', array( $this, 'handle_shortcode' ) );
 	}
 

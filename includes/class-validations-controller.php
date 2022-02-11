@@ -54,6 +54,22 @@ class Validations_Controller {
 			'tiene un formato incorrecto.'
 		);
 
+		Validator::addRule(
+			'document_exists_except_owner',
+			function( $field, $value, array $params, array $fields ) {
+				return ! DB()->document_exists( $value, API()->client_id() );
+			},
+			MSG()::DOCUMENT_EXISTS
+		);
+
+		Validator::addRule(
+			'email_exists_except_owner',
+			function( $field, $value, array $params, array $fields ) {
+				return ! DB()->email_exists( $value, API()->client_id() );
+			},
+			MSG()::EMAIL_EXISTS
+		);
+
 	}
 
 }

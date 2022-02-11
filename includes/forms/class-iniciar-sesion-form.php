@@ -65,6 +65,15 @@ class Iniciar_Sesion_Form extends Form {
 
 	}
 
+	public function get_validation_labels() {
+
+		return array(
+			'email'    => 'Correo electrónico',
+			'password' => 'Contraseña',
+		);
+
+	}
+
 	public function submit() {
 
 		$response = AG()->log_in(
@@ -73,7 +82,7 @@ class Iniciar_Sesion_Form extends Form {
 		);
 
 		if ( $response['success'] ) {
-			$this->success_message( $response['data']['message'] );
+			wp_safe_redirect( get_permalink( AG()::PROFILE_FORM_ID ), 302 );
 		} else {
 			$this->error_message( $response['data']['message'] );
 		}
@@ -82,7 +91,6 @@ class Iniciar_Sesion_Form extends Form {
 
 	public function current_user_can_submit() {
 		return true;
-		//return AG()->is_client_logged_in();
 	}
 
 }

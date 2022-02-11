@@ -128,6 +128,11 @@ class Autogestion_Controller {
 			return;
 		}
 
+		if ( 3416 === get_the_ID() ) {
+			AG()->log_out();
+			wp_safe_redirect( get_permalink( self::LOGIN_FORM_ID ) );
+		}
+
 		if ( in_array(
 			get_the_ID(),
 			array(

@@ -45,6 +45,14 @@ MSG;
 	Su usuario no tiene permitido realizar esta operación, disculpe las molestias.
 MSG;
 
+	const DOCUMENT_EXISTS = <<<MSG
+	El documento pertenece a un usuario registrado, deberá iniciar sesión.
+MSG;
+
+	const EMAIL_EXISTS = <<<MSG
+	El correo electrónico pertenece a una cuenta ya registrada, deberá ingresar otro correo electrónico.
+MSG;
+
 }
 
 /**
