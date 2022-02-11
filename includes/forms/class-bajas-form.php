@@ -27,6 +27,10 @@ class Bajas_Form extends Form {
 
 		$this->warning_message( MSG()::BAJA_WARNING, true );
 
+		if ( true !== API()->is_client_data_complete() ) {
+			$this->error_message( MSG()::COMPLETE_PROFILE_INFO, true );
+		}
+
 		?>
 		<section class="section">
 			<h1>Datos de la baja</h1>

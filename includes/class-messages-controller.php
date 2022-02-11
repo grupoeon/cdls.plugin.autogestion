@@ -124,8 +124,24 @@ MSG;
 	Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.
 MSG;
 
-	const SUCCESS_CMP = <<<MSG
+	const CMP_IN_PROGRESS = <<<MSG
 	Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.
+MSG;
+
+	const COMPLETE_PROFILE_INFO = <<<MSG
+	Debés completar los datos de tu perfil antes de poder utilizar este formulario. <a href="/autogestion/mi-perfil"><b>Ver perfil</b></a>.
+MSG;
+
+	const EMAIL_ALTA_SUBJECT = <<<MSG
+	Caminos de las Sierras | Solicitud de Alta en trámite
+MSG;
+
+	const EMAIL_ALTA_CONTENT = <<<MSG
+	Su solicitud de alta de vehículo (<b>%s</b>) fue enviada. Dentro de las próximas 72 hs hábiles se le enviará un email informándole el resultado de la validación del trámite.
+MSG;
+
+	const ALTA_IN_PROGRESS = <<<MSG
+	Su solicitud de alta de vehículo fue enviada. Dentro de las próximas 72 hs hábiles se le enviará un email informándole el resultado de la validación del trámite.
 MSG;
 
 }

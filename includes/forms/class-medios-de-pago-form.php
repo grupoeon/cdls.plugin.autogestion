@@ -27,6 +27,10 @@ class Medios_De_Pago_Form extends Form {
 
 		$this->warning_message( MSG()::CMP_WARNING, true );
 
+		if ( true !== API()->is_client_data_complete() ) {
+			$this->error_message( MSG()::COMPLETE_PROFILE_INFO, true );
+		}
+
 		?>
 		<section class="section">
 			<h1>Datos del medio de pago</h1>
@@ -173,7 +177,7 @@ SQL,
 
 		wp_mail( $correo, MSG()::EMAIL_CMP_SUBJECT, MSG()::EMAIL_CMP_CONTENT );
 
-		$this->success_message( MSG()::SUCCESS_CMP );
+		$this->success_message( MSG()::CMP_IN_PROGRESS );
 
 	}
 
