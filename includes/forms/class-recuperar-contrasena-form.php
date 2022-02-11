@@ -176,7 +176,7 @@ class Recuperar_Contrasena_Form {
 		MAIL
 					);
 
-					$form->success_message( 'Tu solicitud de cambio de medio de pago fue enviada.' );
+					$form->success_message( 'Te enviamos un correo con la nueva contraseña para que puedas iniciar sesión.' );
 
 				}
 			}

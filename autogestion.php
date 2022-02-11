@@ -28,7 +28,7 @@ const VERSION     = '1.0.0';
 const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
-const DEBUG       = true;
+const DEBUG       = false;
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
