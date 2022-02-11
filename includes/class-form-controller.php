@@ -25,6 +25,7 @@ class Form_Controller {
 		'medios-de-pago'       => __NAMESPACE__ . '\Medios_De_Pago_Form',
 		'registro'             => __NAMESPACE__ . '\Registro_Form',
 		'recuperar-contrasena' => __NAMESPACE__ . '\Recuperar_Contrasena_Form',
+		'cambiar-contrasena'   => __NAMESPACE__ . '\Cambiar_Contrasena_Form',
 	);
 
 

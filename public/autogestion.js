@@ -46,7 +46,11 @@
 
     conditionField("[name=id_medio_de_pago]", {
       9: ["[name=nro_cbu]"],
-      else: ["[name=nro_tarjeta]", "[name=vencimiento_tarjeta]"],
+      else: [
+        "[name=nro_tarjeta]",
+        "[name=vencimiento_tarjeta_ano]",
+        "[name=vencimiento_tarjeta_mes]",
+      ],
     });
   });
 })();

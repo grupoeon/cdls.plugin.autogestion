@@ -183,6 +183,8 @@ class Altas_Form extends Form {
 
 		$procedure_id = DB()->new_procedure( 1 );
 
+		$vencimiento_tarjeta = ! empty( $_POST['vencimiento_tarjeta_ano'] ) && ! empty( $_POST['vencimiento_tarjeta_mes'] ) ? $_POST['vencimiento_tarjeta_ano'] . $_POST['vencimiento_tarjeta_mes'] : null;
+
 		DB()->insert(
 			<<<SQL
 				INSERT INTO gestiones_altas (
@@ -221,7 +223,7 @@ class Altas_Form extends Form {
 				'id_categoria'            => $_POST['id_categoria'],
 				'id_medio_de_pago'        => $_POST['id_medio_de_pago'],
 				'nro_medio_de_pago'       => $_POST['nro_tarjeta'] ? $_POST['nro_tarjeta'] : $_POST['nro_cbu'],
-				'vencimiento_tarjeta'     => $_POST['nro_tarjeta'] ? $_POST['vencimiento_tarjeta'] : null,
+				'vencimiento_tarjeta'     => $vencimiento_tarjeta,
 				'nombre_medio_de_pago'    => $_POST['nombre'],
 				'documento_medio_de_pago' => $_POST['documento'],
 			)
@@ -246,9 +248,8 @@ class Altas_Form extends Form {
 		$id_medio_de_pago        = $_POST['id_medio_de_pago'];
 		$tipo_medio_de_pago      = $id_medio_de_pago == 9 ? 2 : 1;
 		$id_medio_de_pago        = $id_medio_de_pago == 9 ? '' : $id_medio_de_pago;
-		$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
-		$mes_vencimiento_tarjeta = substr( $vencimiento_tarjeta, 4 );
-		$ano_vencimiento_tarjeta = substr( $vencimiento_tarjeta, 0, 4 );
+		$ano_vencimiento_tarjeta = $_POST['vencimiento_tarjeta_ano'];
+		$mes_vencimiento_tarjeta = $_POST['vencimiento_tarjeta_mes'];
 		$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
 		$marca                   = $_POST['marca'];
 		$dominio                 = $_POST['dominio'];

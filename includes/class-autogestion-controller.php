@@ -26,6 +26,7 @@ class Autogestion_Controller {
 	const PAYMENT_FORM_ID          = 3372;
 	const BAJAS_FORM_ID            = 3373;
 	const MENU_ID                  = 13;
+	const CHANGE_PASSWORD_FORM_ID  = 4082;
 
 	/**
 	 * The single instance of the class.
@@ -185,6 +186,10 @@ class Autogestion_Controller {
 				}
 
 				if ( in_array( $menu_item->ID, array( self::PAYMENT_FORM_ID, self::BAJAS_FORM_ID ) ) && empty( API()->client_number() ) ) {
+					return false;
+				}
+
+				if ( self::CHANGE_PASSWORD_FORM_ID === $menu_item->ID && ! AG()->is_client_logged_in() ) {
 					return false;
 				}
 

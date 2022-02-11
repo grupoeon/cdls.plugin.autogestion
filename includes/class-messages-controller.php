@@ -144,6 +144,22 @@ MSG;
 	Su solicitud de alta de vehículo fue enviada. Dentro de las próximas 72 hs hábiles se le enviará un email informándole el resultado de la validación del trámite.
 MSG;
 
+	const CHANGED_PASSWORD = <<<MSG
+	Su contraseña fue actualizada.
+MSG;
+
+	const MAIL_CHANGE_PASSWORD_SUBJECT = <<<MSG
+	Caminos de las Sierras | Contraseña actualizada.
+MSG;
+
+	const MAIL_CHANGE_PASSWORD_CONTENT = <<<MSG
+	Su contraseña fue actualizada recientemente, si no fue usted, comuníquese de inmediato con la Oficina de Atención al Usuario de Caminos de las Sierras 
+MSG;
+
+	const PASSWORD_NOT_MATCH = <<<MSG
+	es incorrecta.
+MSG;
+
 }
 
 /**

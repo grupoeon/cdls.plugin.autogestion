@@ -86,6 +86,14 @@ class Validations_Controller {
 			MSG()::EMAIL_EXISTS
 		);
 
+		Validator::addRule(
+			'currentPassword',
+			function( $field, $value, array $params, array $fields ) {
+				return DB()->is_current_password( $value );
+			},
+			MSG()::PASSWORD_NOT_MATCH
+		);
+
 	}
 
 }

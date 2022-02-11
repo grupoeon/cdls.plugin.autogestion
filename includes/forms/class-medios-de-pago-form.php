@@ -80,9 +80,17 @@ class Medios_De_Pago_Form extends Form {
 
 		echo $this->form->number(
 			array(
-				'name'   => 'vencimiento_tarjeta',
-				'label'  => 'Vencimiento de la tarjeta',
-				'string' => 'placeholder="ej. AAAAMM"',
+				'name'   => 'vencimiento_tarjeta_ano',
+				'label'  => 'Vencimiento Año (AAAA)',
+				'string' => 'placeholder="ej. 2028"',
+			)
+		);
+
+		echo $this->form->number(
+			array(
+				'name'   => 'vencimiento_tarjeta_mes',
+				'label'  => 'Vencimiento Mes (MM)',
+				'string' => 'placeholder="ej. 04"',
 			)
 		);
 
@@ -113,7 +121,8 @@ class Medios_De_Pago_Form extends Form {
 				array( 'nro_tarjeta', 14, 16 ),
 			),
 			'length'        => array(
-				array( 'vencimiento_tarjeta', 6 ),
+				array( 'vencimiento_tarjeta_ano', 4 ),
+				array( 'vencimiento_tarjeta_mes', 2 ),
 				array( 'nro_cbu', 22 ),
 			),
 
@@ -122,13 +131,16 @@ class Medios_De_Pago_Form extends Form {
 	}
 	public static function get_validation_labels() {
 		return array(
-			'id_medio_de_pago' => 'Medio de Pago',
+			'id_medio_de_pago'        => 'Medio de Pago',
+			'vencimiento_tarjeta_ano' => 'Vencimiento Tarjeta Año',
 		);
 	}
 
 	public function submit() {
 
 		$procedure_id = DB()->new_procedure( 3 );
+
+		$vencimiento_tarjeta = ! empty( $_POST['vencimiento_tarjeta_ano'] ) && ! empty( $_POST['vencimiento_tarjeta_mes'] ) ? $_POST['vencimiento_tarjeta_ano'] . $_POST['vencimiento_tarjeta_mes'] : null;
 
 		DB()->insert(
 			<<<SQL
@@ -156,7 +168,7 @@ SQL,
 				'nro_cliente'             => API()->client_number(),
 				'id_medio_de_pago'        => $_POST['id_medio_de_pago'],
 				'nro_medio_de_pago'       => $_POST['nro_tarjeta'] ? $_POST['nro_tarjeta'] : $_POST['nro_cbu'],
-				'vencimiento_tarjeta'     => $_POST['nro_tarjeta'] ? $_POST['vencimiento_tarjeta'] : null,
+				'vencimiento_tarjeta'     => $vencimiento_tarjeta,
 				'nombre_medio_de_pago'    => $_POST['nombre'],
 				'documento_medio_de_pago' => $_POST['documento'],
 			)
@@ -167,7 +179,7 @@ SQL,
 		$documento               = $client_data['documento'];
 		$correo                  = $client_data['correo'];
 		$tipo_medio_de_pago      = $_POST['id_medio_de_pago'] == 9 ? 2 : 1;
-		$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
+		$vencimiento_tarjeta     = $vencimiento_tarjeta ?: '';
 		$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
 		$nombre_medio_de_pago    = $_POST['nombre'];
 		$documento_medio_de_pago = $_POST['documento'];

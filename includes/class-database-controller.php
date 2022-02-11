@@ -68,6 +68,13 @@ class Database_Controller {
 		return $this->_db;
 	}
 
+	public function is_current_password( $password ) {
+
+		$client_data = $this->get_client_data( API()->client_id() );
+		return password_verify( $password, $client_data['contrasena'] );
+
+	}
+
 	/**
 	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.
 	 */
