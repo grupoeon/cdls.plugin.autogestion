@@ -1,41 +1,27 @@
 <?php
 /**
- * This is the login form.
+ * This is the registration form.
  *
- * @package cdls-autogestion
+ * @phpcs:disable Squiz.Commenting, Generic.Commenting
+ * @phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
  */
-
 namespace CdlS;
 
 defined( 'ABSPATH' ) || die;
 
-/**
- * The login form controller.
- */
-class Iniciar_Sesion_Form {
+class Iniciar_Sesion_Form extends Form {
 
 	/**
-	 * This method builds the form using Formr.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
+	 * phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	 */
-	public static function build( $form ) {
+	public function build() {
 
 		// @phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['not_logged_in'] ) ) {
-			$form->error_message( 'Por favor, iniciá sesión para poder acceder a los servicios de autogestión.' );
+			$this->error_message( MSG()::NOT_LOGGED_IN_REFERRAL, true );
 		}
 
-		$form->warning_message(
-			<<<MSG
-Para iniciar sesión primero debés registrarte. Si aún no lo hiciste, podés hacerlo de dos maneras:
-<ol>
-<li>Si <b>aún no sos cliente nuestro</b> y querés registrar tu primer vehículo, <a href="/autogestion/registrarse"><b>registrate desde aquí</b></a>.</li>
-<li>Si <b>sos cliente y tenés vehículos registrados</b> con nosotros, recuperá tu contraseña <a href="/autogestion/recuperar-contrasena"><b>desde aquí</b></a>.</li>
-</ol>
-MSG
-		);
+		$this->warning_message( MSG()::REGISTRATION_INFO, true );
 
 		?>
 
@@ -43,19 +29,7 @@ MSG
 			<section class="section">
 				<h1>Iniciar Sesión</h1>
 				<section class="fields">
-				<?php
-
-				// type(.*) => name,label,value,id.
-				// keys must be unique, key must start with type, then it can be anything, ex. text2.
-				$array = array(
-					'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico" style="margin-bottom:1rem;"',
-					'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
-					'submit'   => 'login,,Ingresar,login',
-				);
-
-				$form->fastform( $array );
-
-				?>
+				<?php $this->output_form_fields(); ?>
 				</section>
 			</section>
 		</section>
@@ -63,30 +37,47 @@ MSG
 
 	}
 
-	/**
-	 * This method validates & processes submitted data using Formr.
-	 * It should also print success or error messages.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
-	 */
-	public static function on_submit( $form ) {
+	public function output_form_fields() {
 
-		$rules = array(
-			'email'    => array( 'Correo electrónico', 'required' ),
-			'password' => array( 'Contraseña', 'required' ),
+		$array = array(
+			'email'    => 'email,Correo Electrónico,,email,placeholder="Ingresá tu correo electrónico" style="margin-bottom:1rem;"',
+			'password' => 'password,Contraseña,,password,placeholder="Ingresá tu contraseña"',
+			'submit'   => 'login,,Ingresar,login',
 		);
 
-		$data = $form->fastpost( $rules );
+		/**
+		 * @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		 */
+		echo $this->form->fastform( $array );
 
-		$response = AG()->log_in( $data['email'], $data['password'] );
+	}
+
+	public function get_validation_rules() {
+
+		return array(
+			'required' => array( 'email', 'password' ),
+			'email'    => array( 'email' ),
+		);
+
+	}
+
+	public function submit() {
+
+		$response = AG()->log_in(
+			$this->post( 'email' ),
+			$this->post( 'password' )
+		);
 
 		if ( $response['success'] ) {
-			$form->success_message( $response['data']['message'] );
+			$this->success_message( $response['data']['message'] );
 		} else {
-			$form->error_message( $response['data']['message'] );
+			$this->error_message( $response['data']['message'] );
 		}
 
+	}
+
+	public function current_user_can_submit() {
+		return AG()->is_client_logged_in();
 	}
 
 }

@@ -2,27 +2,16 @@
 /**
  * This is the registration form.
  *
- * @package cdls-autogestion
+ * @phpcs:disable Squiz.Commenting, Generic.Commenting
+ * @phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
  */
-
 namespace CdlS;
 
 defined( 'ABSPATH' ) || die;
 
-/**
- * The registration form controller.
- */
-class Registro_Form {
+class Registro_Form extends Form {
 
-	const ID = 'cdls-registro-primera-vez';
-
-	/**
-	 * This method builds the form using Formr.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
-	 */
-	public static function build( $form ) {
+	public function build( $form ) {
 
 		$form->required = '(nro_calle),(piso),(departamento)';
 
@@ -160,14 +149,7 @@ class Registro_Form {
 
 	}
 
-	/**
-	 * This method validates & processes submitted data using Formr.
-	 * It should also print success or error messages.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
-	 */
-	public static function on_submit( $form ) {
+	public function submit( $form ) {
 
 		\Valitron\Validator::lang( 'es' );
 		$v = new \Valitron\Validator( $_POST );
