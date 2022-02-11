@@ -1,134 +1,115 @@
 <?php
 /**
- * This is the Bajas form.
+ * This controls all the Autogestion forms.
  *
- * @package cdls-autogestion
+ * @phpcs:disable Squiz.Commenting, Generic.Commenting
+ * @phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
  */
 
 namespace CdlS;
 
 defined( 'ABSPATH' ) || die;
 
-/**
- * The Bajas form controller.
- */
-class Bajas_Form {
-
-	const ID = 'cdls-bajas';
+class Bajas_Form extends Form {
 
 	/**
-	 * This method builds the form using Formr.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
+	 * @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	 */
-	public static function build( $form ) {
+	public function build() {
 
-		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
+		echo $this->form->open(
+			$this->form->id,
+			$this->form->name,
+			'',
+			'POST',
+			'class="cdls-form"'
+		);
 
-		$form->warning_message( 'Esta baja será efectiva una vez que reciba la confirmación definitiva por parte de Caminos de las Sierras SA. De no recibirla en 72 hs. hábiles por favor póngase en contacto con la Oficina de Atención al Usuario de Caminos de las Sierras.' );
+		$this->warning_message( MSG()::BAJA_WARNING, true );
 
 		?>
 		<section class="section">
 			<h1>Datos de la baja</h1>
 			<section class="fields">
-				<?php
-					$form->select(
-						array(
-							'name'     => 'dominios',
-							'label'    => 'Dominio',
-							'options'  => API()->get_baja_vehicles(),
-							'selected' => 'Seleccione',
-						)
-					);
-				?>
+				<?php echo $this->output_form_fields(); ?>
 			</section>
-			<?php $form->submit_button( 'Solicitar Baja' ); ?>
+			<?php echo $this->form->input_hidden( 'cdls_form_id', $this->form->id ); ?>
+			<?php echo $this->form->submit_button( 'Solicitar Baja' ); ?>
 		</section>
 		<?php
 
-		$form->close();
+		echo $this->form->close();
 
 	}
 
-	/**
-	 * This method validates & processes submitted data using Formr.
-	 * It should also print success or error messages.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
-	 */
-	public static function on_submit( $form ) {
+	public function output_form_fields() {
 
-		\Valitron\Validator::lang( 'es' );
-		$v = new \Valitron\Validator( $_POST );
-
-		$v->rules(
+		echo $this->form->select(
 			array(
-				'required'    => array( 'dominios' ),
-				'domainBajas' => array( 'dominios' ),
+				'name'     => 'dominios',
+				'label'    => 'Dominio',
+				'options'  => API()->get_baja_vehicles(),
+				'selected' => 'Seleccione',
 			)
 		);
 
-		$valid = $v->validate() ? true : $v->errors();
+	}
 
-		if ( $valid === true ) {
-			$gestion_id = DB()->insert(
-				<<<SQL
-					INSERT INTO gestiones ( id_tipo_gestion, estado_gestion, ip_gestion ) 
-					VALUES ('2', '1', :ip);
+	public static function get_validation_rules() {
+		return array(
+			'required'    => array( 'dominios' ),
+			'domainBajas' => array( 'dominios' ),
+		);
+	}
+	public static function get_validation_labels() {
+		return array( 'dominios' => 'Dominio' );
+	}
+
+	public function submit() {
+
+		$procedure_id = DB()->new_procedure( 2 );
+
+		DB()->insert(
+			<<<SQL
+				INSERT INTO gestiones_bajas ( 
+					nro_gestion, 
+					nro_cliente,
+					dominio ) 
+				VALUES (
+					:nro_gestion, 
+					:nro_cliente,
+					:dominio
+				)
 
 SQL,
-				array(
-					'ip' => $_SERVER['REMOTE_ADDR'],
-				)
-			);
+			array(
+				'nro_gestion' => $procedure_id,
+				'nro_cliente' => API()->client_number(),
+				'dominio'     => $_POST['dominios'],
+			)
+		);
 
-			DB()->insert(
-				<<<SQL
-					INSERT INTO gestiones_bajas ( 
-						nro_gestion, 
-						nro_cliente,
-						dominio ) 
-					VALUES (
-						:nro_gestion, 
-						:nro_cliente,
-						:dominio
-					)
+		$client_data    = API()->get_client_data();
+		$tipo_documento = $client_data['id_tipo_documento'];
+		$documento      = $client_data['documento'];
+		$correo         = $client_data['correo'];
+		$dominio        = $_POST['dominios'];
+		$fecha_gestion  = date( 'Ymdhis' );
 
-SQL,
-				array(
-					'nro_gestion' => $gestion_id,
-					'nro_cliente' => API()->client_number(),
-					'dominio'     => $_POST['dominios'],
-				)
-			);
+		TXT()->generate( 'Bajas', "$tipo_documento;$documento;$correo;$dominio;$procedure_id;$fecha_gestion" );
 
-			$client_data    = API()->get_client_data();
-			$tipo_documento = $client_data['id_tipo_documento'];
-			$documento      = $client_data['documento'];
-			$correo         = $client_data['correo'];
-			$dominio        = $_POST['dominios'];
-			$fecha_gestion  = date( 'Ymdhis' );
+		wp_mail(
+			$correo,
+			MSG()::EMAIL_BAJA_SUBJECT,
+			sprintf( MSG()::EMAIL_BAJA_CONTENT, $dominio )
+		);
 
-			TXT()->generate( 'Bajas', "$tipo_documento;$documento;$correo;$dominio;$gestion_id;$fecha_gestion" );
+		$this->success_message( MSG()::BAJA_IN_PROGRESS );
 
-			wp_mail( $correo, 'Caminos de las Sierras | Solicitud de Baja en trámite', "Su solicitud de baja de dominio (<b>$dominio</b>) fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada." );
+	}
 
-			$form->success_message( 'Su solicitud de baja de dominio fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada.' );
-		} else {
-			$errors = $valid;
-			ob_start();
-			foreach ( $errors as $error ) {
-				?>
-				<li><?php echo esc_html( $error[0] ); ?></li>
-				<?php
-			}
-			$error_messages = ob_get_clean();
-			$message        = "Revisa los siguientes errores: <ul>$error_messages</ul>";
-			$form->error_message( $message );
-		}
-
+	public function current_user_can_submit() {
+		return AG()->is_client_logged_in() && API()->is_client_data_complete();
 	}
 
 }

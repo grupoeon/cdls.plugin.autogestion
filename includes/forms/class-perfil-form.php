@@ -12,7 +12,6 @@ defined( 'ABSPATH' ) || die;
 
 class Perfil_Form extends Form {
 
-
 	/**
 	 * @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	 */
@@ -40,6 +39,7 @@ class Perfil_Form extends Form {
 			<section class="fields">
 				<?php $this->output_form_fields(); ?>
 			</section>
+			<?php echo $this->form->input_hidden( 'cdls_form_id', $this->form->id ); ?>
 			<?php echo $this->form->submit_button( 'Actualizar Datos' ); ?>
 		</section>
 		<?php
@@ -182,8 +182,6 @@ class Perfil_Form extends Form {
 				'value' => $client_data['codigo_postal'],
 			)
 		);
-
-		echo $this->form->input_hidden( 'cdls_form_id', $this->form->id );
 
 	}
 

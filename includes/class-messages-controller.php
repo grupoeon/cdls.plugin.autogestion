@@ -82,6 +82,34 @@ MSG;
 	Esta es una respuesta automática, por favor no responda este email.
 MAIL;
 
+	const PASSWORD_RECOVERY_EXPLANATION = <<<MSG
+	Para recuperar tu contraseña necesitamos <b>verificar tu identidad</b>.<br><br>Ingresá el <b>número de DNI/CUIT</b> con el que te registraste y el <b>dominio/patente</b> de un vehículo que hayas registrado (no importa si fue dado de baja).
+MSG;
+
+	const CLIENT_RECORDS_NOT_FOUND = <<<MSG
+	Los datos ingresados no concuerdan con nuestros registros, por favor comunicarse con la Oficina de Atención al Usuario de Caminos de las Sierras.
+MSG;
+
+	const NEW_PASSWORD_SENT = <<<MSG
+	Te enviamos un correo con la nueva contraseña para que puedas iniciar sesión.
+MSG;
+
+	const BAJA_WARNING = <<<MSG
+	Esta baja será efectiva una vez que reciba la confirmación definitiva por parte de Caminos de las Sierras SA. De no recibirla en 72 hs. hábiles por favor póngase en contacto con la Oficina de Atención al Usuario de Caminos de las Sierras.
+MSG;
+
+	const EMAIL_BAJA_SUBJECT = <<<MSG
+	Caminos de las Sierras | Solicitud de Baja en trámite
+MSG;
+
+	const EMAIL_BAJA_CONTENT = <<<MSG
+	Su solicitud de baja de dominio (<b>%s</b>) fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada.
+MSG;
+
+	const BAJA_IN_PROGRESS = <<<MSG
+	Su solicitud de baja de dominio fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada.
+MSG;
+
 }
 
 /**

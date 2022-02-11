@@ -18,11 +18,11 @@ class Registro_Form extends Form {
 
 		$this->form->required = '(nro_calle),(piso),(departamento)';
 
-		$this->warning_message( MSG()::REMEMBER_OLD_CLIENTS );
+		$this->warning_message( MSG()::REMEMBER_OLD_CLIENTS, true );
 
 		echo $this->form->open(
 			$this->form->id,
-			$this->form->id,
+			$this->form->name,
 			'',
 			'POST',
 			'class="cdls-form"'
@@ -34,11 +34,12 @@ class Registro_Form extends Form {
 			<section class="fields">
 			<?php $this->output_form_fields(); ?>
 			</section>
+			<?php echo $this->form->input_hidden( 'cdls_form_id', $this->form->id ); ?>
 			<?php echo $this->form->submit_button( 'Registrarme' ); ?>
 		</section>
 		<?php
 
-		$this->form->close();
+		echo $this->form->close();
 
 	}
 

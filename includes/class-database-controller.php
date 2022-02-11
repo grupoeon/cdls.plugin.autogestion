@@ -69,6 +69,26 @@ class Database_Controller {
 	}
 
 	/**
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.
+	 */
+	public function new_procedure( $procedure_type ) {
+
+		$procedure_id = DB()->insert(
+			<<<SQL
+				INSERT INTO gestiones ( id_tipo_gestion, estado_gestion, ip_gestion ) 
+				VALUES (:type, '1', :ip);
+SQL,
+			array(
+				'type' => $procedure_type,
+				'ip'   => $_SERVER['REMOTE_ADDR'],
+			)
+		);
+
+		return $procedure_id;
+
+	}
+
+	/**
 	 * Returns the queries result.
 	 *
 	 * @return array
