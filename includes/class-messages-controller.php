@@ -110,6 +110,24 @@ MSG;
 	Su solicitud de baja de dominio fue enviada. En el transcurso de las próximas 72 horas hábiles, ud recibirá un email con la confirmación definitiva de la baja solicitada una vez aprobada.
 MSG;
 
+	const CMP_WARNING = <<<MSG
+	El cambio de un medio de pago se aplica a todos los vehículos de la cuenta. <br>
+	Si usted no desea cambiar la totalidad de los vehículos por favor póngase en contacto con la Oficina de Atención al Usuario de Caminos de las Sierras.<br><br>
+	El cambio será efectivo una vez que reciba la confirmación definitiva por parte de Caminos de las Sierras SA. De no recibirla en 72 hs. hábiles por favor póngase en contacto con la Oficina de Atención al Usuario.
+MSG;
+
+	const EMAIL_CMP_SUBJECT = <<<MSG
+	Caminos de las Sierras | Solicitud de Cambio de Medio de Pago en trámite
+MSG;
+
+	const EMAIL_CMP_CONTENT = <<<MSG
+	Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.
+MSG;
+
+	const SUCCESS_CMP = <<<MSG
+	Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.
+MSG;
+
 }
 
 /**

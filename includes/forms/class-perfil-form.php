@@ -1,6 +1,6 @@
 <?php
 /**
- * This controls all the Autogestion forms.
+ * This is the profile form.
  *
  * @phpcs:disable Squiz.Commenting, Generic.Commenting
  * @phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore

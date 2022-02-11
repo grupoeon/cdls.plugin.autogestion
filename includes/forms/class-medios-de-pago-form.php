@@ -1,216 +1,184 @@
 <?php
 /**
- * This is the Medios de Pago form.
+ * This is the medios de pago form.
  *
- * @package cdls-autogestion
+ * @phpcs:disable Squiz.Commenting, Generic.Commenting
+ * @phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
  */
 
 namespace CdlS;
 
 defined( 'ABSPATH' ) || die;
 
-/**
- * The Medios de Pago form controller.
- */
-class Medios_De_Pago_Form {
-
-	const ID = 'cdls-medios-de-pago';
+class Medios_De_Pago_Form extends Form {
 
 	/**
-	 * This method builds the form using Formr.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
+	 * @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	 */
-	public static function build( $form ) {
+	public function build() {
 
-		$form->open( self::ID, self::ID, '', 'POST', 'class="cdls-form"' );
-
-		$form->warning_message(
-			<<<TXT
-		El cambio de un medio de pago se aplica a todos los vehículos de la cuenta. 
-		<br>Si usted no desea cambiar la totalidad de los vehículos por favor póngase en contacto con la Oficina de Atención al Usuario de Caminos de las Sierras.
-		<br><br>El cambio será efectivo una vez que reciba la confirmación definitiva por parte de Caminos de las Sierras SA. De no recibirla en 72 hs. hábiles por favor póngase en contacto con la Oficina de Atención al Usuario.
-TXT
+		echo $this->form->open(
+			$this->form->id,
+			$this->form->name,
+			'',
+			'POST',
+			'class="cdls-form"'
 		);
+
+		$this->warning_message( MSG()::CMP_WARNING, true );
 
 		?>
 		<section class="section">
 			<h1>Datos del medio de pago</h1>
 			<section class="fields">
-			<?php
-
-			$form->select(
-				array(
-					'name'     => 'id_medio_de_pago',
-					'label'    => 'Medio de Pago',
-					'options'  => API()->get_payment_methods( array( 1, 2 ) ),
-					'selected' => 'Seleccione',
-				)
-			);
-
-			$form->text(
-				array(
-					'name'  => 'nombre',
-					'label' => 'Nombre del Titular',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'  => 'documento',
-					'label' => 'DNI/CUIT del Titular',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'  => 'nro_tarjeta',
-					'label' => 'Número de la tarjeta',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'   => 'vencimiento_tarjeta',
-					'label'  => 'Vencimiento de la tarjeta',
-					'string' => 'placeholder="ej. AAAAMM"',
-				)
-			);
-
-			$form->number(
-				array(
-					'name'  => 'nro_cbu',
-					'label' => 'Número de CBU',
-				)
-			);
-
-			?>
+			<?php $this->output_form_fields(); ?>
 			</section>
-			<?php $form->submit_button( 'Actualizar Datos' ); ?>
+			<?php echo $this->form->input_hidden( 'cdls_form_id', $this->form->id ); ?>
+			<?php echo $this->form->submit_button( 'Actualizar Datos' ); ?>
 		</section>
 		<?php
 
-		$form->close();
+		echo $this->form->close();
 
 	}
 
-	/**
-	 * This method validates & processes submitted data using Formr.
-	 * It should also print success or error messages.
-	 *
-	 * @param Formr $form The Formr instance.
-	 * @return void
-	 */
-	public static function on_submit( $form ) {
+	public function output_form_fields() {
 
-		\Valitron\Validator::lang( 'es' );
-		$v = new \Valitron\Validator( $_POST );
-
-		$v->rules(
+		echo $this->form->select(
 			array(
-				'in'            => array(
-					array( 'id_medio_de_pago', array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) ),
-				),
-				'numeric'       => array( 'documento' ),
-				'lengthBetween' => array(
-					array( 'documento', 7, 11 ),
-				),
-				'lengthMax'     => array(
-					array( 'nombre', 50 ),
-				),
-				'lengthBetween' => array(
-					array( 'nro_tarjeta', 14, 16 ),
-				),
-				'length'        => array(
-					array( 'vencimiento_tarjeta', 6 ),
-					array( 'nro_cbu', 22 ),
-				),
-
+				'name'     => 'id_medio_de_pago',
+				'label'    => 'Medio de Pago',
+				'options'  => API()->get_payment_methods( array( 1, 2 ) ),
+				'selected' => 'Seleccione',
 			)
 		);
 
-		$v->labels(
+		echo $this->form->text(
 			array(
-				'id_medio_de_pago' => 'Medio de Pago',
+				'name'  => 'nombre',
+				'label' => 'Nombre del Titular',
 			)
 		);
 
-		$valid = $v->validate() ? true : $v->errors();
+		echo $this->form->number(
+			array(
+				'name'  => 'documento',
+				'label' => 'DNI/CUIT del Titular',
+			)
+		);
 
-		if ( $valid === true ) {
-			$gestion_id = DB()->insert(
-				<<<SQL
-					INSERT INTO gestiones ( id_tipo_gestion, estado_gestion, ip_gestion ) 
-					VALUES ('3', '1', :ip);
+		echo $this->form->number(
+			array(
+				'name'  => 'nro_tarjeta',
+				'label' => 'Número de la tarjeta',
+			)
+		);
+
+		echo $this->form->number(
+			array(
+				'name'   => 'vencimiento_tarjeta',
+				'label'  => 'Vencimiento de la tarjeta',
+				'string' => 'placeholder="ej. AAAAMM"',
+			)
+		);
+
+		echo $this->form->number(
+			array(
+				'name'  => 'nro_cbu',
+				'label' => 'Número de CBU',
+			)
+		);
+
+	}
+
+	public static function get_validation_rules() {
+
+		return array(
+			'required'      => array( 'id_medio_de_pago', 'nombre', 'documento' ),
+			'in'            => array(
+				array( 'id_medio_de_pago', array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) ),
+			),
+			'numeric'       => array( 'documento' ),
+			'lengthBetween' => array(
+				array( 'documento', 7, 11 ),
+			),
+			'lengthMax'     => array(
+				array( 'nombre', 50 ),
+			),
+			'lengthBetween' => array(
+				array( 'nro_tarjeta', 14, 16 ),
+			),
+			'length'        => array(
+				array( 'vencimiento_tarjeta', 6 ),
+				array( 'nro_cbu', 22 ),
+			),
+
+		);
+
+	}
+	public static function get_validation_labels() {
+		return array(
+			'id_medio_de_pago' => 'Medio de Pago',
+		);
+	}
+
+	public function submit() {
+
+		$procedure_id = DB()->new_procedure( 3 );
+
+		DB()->insert(
+			<<<SQL
+				INSERT INTO gestiones_medios_de_pago ( 
+					nro_gestion, 
+					nro_cliente,
+					id_medio_de_pago,
+					nro_medio_de_pago,
+					vencimiento_tarjeta,
+					nombre_medio_de_pago,
+					documento_medio_de_pago  ) 
+				VALUES (
+					:nro_gestion, 
+					:nro_cliente,
+					:id_medio_de_pago,
+					:nro_medio_de_pago,
+					:vencimiento_tarjeta,
+					:nombre_medio_de_pago,
+					:documento_medio_de_pago 
+				);
 
 SQL,
-				array(
-					'ip' => $_SERVER['REMOTE_ADDR'],
-				)
-			);
+			array(
+				'nro_gestion'             => $procedure_id,
+				'nro_cliente'             => API()->client_number(),
+				'id_medio_de_pago'        => $_POST['id_medio_de_pago'],
+				'nro_medio_de_pago'       => $_POST['nro_tarjeta'] ? $_POST['nro_tarjeta'] : $_POST['nro_cbu'],
+				'vencimiento_tarjeta'     => $_POST['nro_tarjeta'] ? $_POST['vencimiento_tarjeta'] : null,
+				'nombre_medio_de_pago'    => $_POST['nombre'],
+				'documento_medio_de_pago' => $_POST['documento'],
+			)
+		);
 
-			DB()->insert(
-				<<<SQL
-					INSERT INTO gestiones_medios_de_pago ( 
-						nro_gestion, 
-						nro_cliente,
-						id_medio_de_pago,
-						nro_medio_de_pago,
-						vencimiento_tarjeta,
-						nombre_medio_de_pago,
-						documento_medio_de_pago  ) 
-					VALUES (
-						:nro_gestion, 
-						:nro_cliente,
-						:id_medio_de_pago,
-						:nro_medio_de_pago,
-						:vencimiento_tarjeta,
-						:nombre_medio_de_pago,
-						:documento_medio_de_pago 
-					);
+		$client_data             = API()->get_client_data();
+		$tipo_documento          = $client_data['id_tipo_documento'];
+		$documento               = $client_data['documento'];
+		$correo                  = $client_data['correo'];
+		$tipo_medio_de_pago      = $_POST['id_medio_de_pago'] == 9 ? 2 : 1;
+		$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
+		$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
+		$nombre_medio_de_pago    = $_POST['nombre'];
+		$documento_medio_de_pago = $_POST['documento'];
+		$fecha_gestion           = date( 'Ymdhis' );
 
-SQL,
-				array(
-					'nro_gestion'             => $gestion_id,
-					'nro_cliente'             => API()->client_number(),
-					'id_medio_de_pago'        => $_POST['id_medio_de_pago'],
-					'nro_medio_de_pago'       => $_POST['nro_tarjeta'] ? $_POST['nro_tarjeta'] : $_POST['nro_cbu'],
-					'vencimiento_tarjeta'     => $_POST['nro_tarjeta'] ? $_POST['vencimiento_tarjeta'] : null,
-					'nombre_medio_de_pago'    => $_POST['nombre'],
-					'documento_medio_de_pago' => $_POST['documento'],
-				)
-			);
+		TXT()->generate( 'CMP', "$tipo_documento;$documento;$correo;$tipo_medio_de_pago;$nro_medio_de_pago;$vencimiento_tarjeta;$nombre_medio_de_pago;$documento_medio_de_pago;$procedure_id;$fecha_gestion" );
 
-			$client_data             = API()->get_client_data();
-			$tipo_documento          = $client_data['id_tipo_documento'];
-			$documento               = $client_data['documento'];
-			$correo                  = $client_data['correo'];
-			$tipo_medio_de_pago      = $_POST['id_medio_de_pago'] == 9 ? 2 : 1;
-			$vencimiento_tarjeta     = $_POST['vencimiento_tarjeta'];
-			$nro_medio_de_pago       = $_POST['nro_tarjeta'] ?: $_POST['nro_cbu'];
-			$nombre_medio_de_pago    = $_POST['nombre'];
-			$documento_medio_de_pago = $_POST['documento'];
-			$fecha_gestion           = date( 'Ymdhis' );
+		wp_mail( $correo, MSG()::EMAIL_CMP_SUBJECT, MSG()::EMAIL_CMP_CONTENT );
 
-			TXT()->generate( 'CMP', "$tipo_documento;$documento;$correo;$tipo_medio_de_pago;$nro_medio_de_pago;$vencimiento_tarjeta;$nombre_medio_de_pago;$documento_medio_de_pago;$gestion_id;$fecha_gestion" );
+		$this->success_message( MSG()::SUCCESS_CMP );
 
-			wp_mail( $correo, 'Caminos de las Sierras | Solicitud de Cambio de Medio de Pago en trámite', 'Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.' );
+	}
 
-			$form->success_message( 'Su solicitud de cambio de medio de pago fue enviada. En el transcurso de las próximas 72 horas hábiles ud recibirá un email con la confirmación definitiva del cambio solicitado, una vez que su pedido haya sido procesado y aprobado.' );
-		} else {
-			$errors = $valid;
-			ob_start();
-			foreach ( $errors as $error ) {
-				?>
-				<li><?php echo esc_html( $error[0] ); ?></li>
-				<?php
-			}
-			$error_messages = ob_get_clean();
-			$message        = "Revisa los siguientes errores: <ul>$error_messages</ul>";
-			$form->error_message( $message );
-		}
-
+	public function current_user_can_submit() {
+		return AG()->is_client_logged_in() && API()->is_client_data_complete();
 	}
 
 }
