@@ -158,52 +158,11 @@ SQL
 		\Valitron\Validator::lang( 'es' );
 		$v = new \Valitron\Validator( $client_data );
 
-		$v->rules(
-			array(
-				'required'        => array(
-					'id_tipo_documento',
-					'id_provincia',
-					'id_localidad',
-				),
-				'in'              => array(
-					array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
-					array( 'id_provincia', array_keys( API()->get_provinces() ) ),
-					array( 'id_localidad', array_keys( API()->get_cities() ) ),
-				),
-				'numeric'         => array( 'documento', 'telefono', 'nro_calle' ),
-				'optional'        => array( 'nro_calle', 'piso', 'departamento' ),
-				'lengthBetween'   => array(
-					array( 'documento', 7, 11 ),
-				),
-				'fiscalCondition' => array( 'id_condicion_fiscal' ),
-				'email'           => array( 'correo' ),
-				'regex'           => array(
-					array( 'nombre', "/[\w \.']+/" ),
-					array( 'apellido', "/[\w \.']+/" ),
-					array( 'razon_social', "/[\w \.\d']+/" ),
-				),
-				'lengthMax'       => array(
-					array( 'telefono', 10 ),
-					array( 'calle', 40 ),
-					array( 'nro_calle', 6 ),
-					array( 'piso', 3 ),
-					array( 'departamento', 3 ),
-					array( 'codigo_postal', 4 ),
-					array( 'apellido', 50 ),
-					array( 'nombre', 50 ),
-					array( 'razon_social', 80 ),
-				),
+		$form_handler = FORM()->get_form_handler( 'perfil', new \Formr\Formr() );
 
-			)
-		);
+		$v->rules( $form_handler::get_validation_rules() );
 
-		$v->labels(
-			array(
-				'id_tipo_documento'   => 'Tipo de Documento',
-				'documento'           => 'Número de Documento',
-				'id_condicion_fiscal' => 'Condición Fiscal',
-			)
-		);
+		$v->labels( $form_handler::get_validation_labels() );
 
 		return $v->validate() ? true : $v->errors();
 

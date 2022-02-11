@@ -183,11 +183,14 @@ class Perfil_Form extends Form {
 			)
 		);
 
+		echo $this->form->input_hidden( 'cdls_form_id', $this->form->id );
+
 	}
 
-	public function get_validation_rules() {
+	public static function get_validation_rules() {
 
 		return array(
+			'required'                     => array( 'id_tipo_documento', 'documento', 'id_condicion_fiscal', 'correo', 'telefono', 'calle', 'id_provincia', 'id_localidad', 'codigo_postal' ),
 			'in'                           => array(
 				array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
 				array( 'id_provincia', array_keys( API()->get_provinces() ) ),
@@ -222,12 +225,14 @@ class Perfil_Form extends Form {
 
 	}
 
-	public function get_validation_labels() {
+	public static function get_validation_labels() {
 
 		return array(
 			'id_tipo_documento'   => 'Tipo de Documento',
-			'documento'           => 'Número de Documento',
 			'id_condicion_fiscal' => 'Condición Fiscal',
+			'id_provincia'        => 'Provincia',
+			'id_localidad'        => 'Localidad',
+			'documento'           => 'Número de Documento',
 		);
 
 	}

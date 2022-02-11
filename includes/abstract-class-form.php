@@ -16,8 +16,8 @@ abstract class Form {
 	abstract public function submit();
 	abstract public function build();
 	abstract public function output_form_fields();
-	abstract public function get_validation_rules();
-	abstract public function get_validation_labels();
+	abstract public static function get_validation_rules();
+	abstract public static function get_validation_labels();
 	abstract public function current_user_can_submit();
 
 	public function __construct( $form ) {
@@ -59,11 +59,11 @@ abstract class Form {
 		 */
 		$v = new \Valitron\Validator( $_POST );
 
-		$rules = $this->get_validation_rules();
+		$rules = static::get_validation_rules();
 
 		$v->rules( $rules );
 
-		$v->labels( $this->get_validation_labels() );
+		$v->labels( static::get_validation_labels() );
 
 		$valid = $v->validate() ? true : $v->errors();
 

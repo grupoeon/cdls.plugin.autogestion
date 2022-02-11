@@ -56,7 +56,7 @@ class Iniciar_Sesion_Form extends Form {
 
 	}
 
-	public function get_validation_rules() {
+	public static function get_validation_rules() {
 
 		return array(
 			'required' => array( 'email', 'password' ),
@@ -65,7 +65,7 @@ class Iniciar_Sesion_Form extends Form {
 
 	}
 
-	public function get_validation_labels() {
+	public static function get_validation_labels() {
 
 		return array(
 			'email'    => 'Correo electrónico',

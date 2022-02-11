@@ -92,12 +92,13 @@ class Database_Controller {
 			$sql .= ' AND id != :client_id';
 		}
 		$stmt = $db->prepare( $sql );
-		$stmt->execute(
-			array(
-				'documento' => $document,
-				'client_id' => $client_id,
-			)
+		$args = array(
+			'documento' => $document,
 		);
+		if ( $client_id ) {
+			$args['client_id'] = $client_id;
+		}
+		$stmt->execute( $args );
 		return (bool) $stmt->fetchColumn();
 	}
 

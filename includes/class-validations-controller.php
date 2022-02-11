@@ -70,6 +70,22 @@ class Validations_Controller {
 			MSG()::EMAIL_EXISTS
 		);
 
+		Validator::addRule(
+			'document_exists',
+			function( $field, $value, array $params, array $fields ) {
+				return ! DB()->document_exists( $value );
+			},
+			MSG()::DOCUMENT_EXISTS
+		);
+
+		Validator::addRule(
+			'email_exists',
+			function( $field, $value, array $params, array $fields ) {
+				return ! DB()->email_exists( $value );
+			},
+			MSG()::EMAIL_EXISTS
+		);
+
 	}
 
 }
