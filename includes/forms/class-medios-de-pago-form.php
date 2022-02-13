@@ -106,21 +106,33 @@ class Medios_De_Pago_Form extends Form {
 	public static function get_validation_rules() {
 
 		return array(
-			'required'      => array( 'id_medio_de_pago', 'nombre', 'documento' ),
-			'in'            => array(
+			'required'            => array( 'id_medio_de_pago', 'nombre', 'documento' ),
+			'required_if_cbu'     => array( 'nro_cbu' ),
+			'required_if_tarjeta' => array(
+				'nro_tarjeta',
+				'vencimiento_tarjeta_ano',
+				'vencimiento_tarjeta_mes',
+			),
+			'optional'            => array(
+				'nro_cbu',
+				'nro_tarjeta',
+				'vencimiento_tarjeta_ano',
+				'vencimiento_tarjeta_mes',
+			),
+			'in'                  => array(
 				array( 'id_medio_de_pago', array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) ),
 			),
-			'numeric'       => array( 'documento' ),
-			'lengthBetween' => array(
+			'numeric'             => array( 'documento' ),
+			'lengthBetween'       => array(
 				array( 'documento', 7, 11 ),
 			),
-			'lengthMax'     => array(
+			'lengthMax'           => array(
 				array( 'nombre', 50 ),
 			),
-			'lengthBetween' => array(
+			'lengthBetween'       => array(
 				array( 'nro_tarjeta', 14, 16 ),
 			),
-			'length'        => array(
+			'length'              => array(
 				array( 'vencimiento_tarjeta_ano', 4 ),
 				array( 'vencimiento_tarjeta_mes', 2 ),
 				array( 'nro_cbu', 22 ),
@@ -141,6 +153,20 @@ class Medios_De_Pago_Form extends Form {
 		$procedure_id = DB()->new_procedure( 3 );
 
 		$vencimiento_tarjeta = ! empty( $_POST['vencimiento_tarjeta_ano'] ) && ! empty( $_POST['vencimiento_tarjeta_mes'] ) ? $_POST['vencimiento_tarjeta_ano'] . $_POST['vencimiento_tarjeta_mes'] : null;
+
+		if ( $_POST['id_medio_de_pago'] == 9 ) {
+			if ( empty( $_POST['nro_cbu'] ) ) {
+				$this->error_message( 'Número de CBU es requerido' );
+				return;
+			}
+		}
+
+		if ( $_POST['id_medio_de_pago'] < 9 ) {
+			if ( empty( $_POST['nro_tarjeta'] ) || empty( $_POST['vencimiento_tarjeta_ano'] ) || empty( $_POST['vencimiento_tarjeta_mes'] ) ) {
+				$this->error_message( 'Complete todos los campos de la tarjeta.' );
+				return;
+			}
+		}
 
 		DB()->insert(
 			<<<SQL

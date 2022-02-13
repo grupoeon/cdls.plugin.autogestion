@@ -94,6 +94,28 @@ class Validations_Controller {
 			MSG()::PASSWORD_NOT_MATCH
 		);
 
+		Validator::addRule(
+			'required_if_cbu',
+			function( $field, $value, array $params, array $fields ) {
+				if ( 9 == $fields['id_medio_de_pago'] ) {
+					return ! empty( $value );
+				}
+				return true;
+			},
+			'es requerido'
+		);
+
+		Validator::addRule(
+			'required_if_tarjeta',
+			function( $field, $value, array $params, array $fields ) {
+				if ( intval( $fields['id_medio_de_pago'] ) <= 8 ) {
+					return ! empty( $value );
+				}
+				return true;
+			},
+			'es requerido'
+		);
+
 	}
 
 }

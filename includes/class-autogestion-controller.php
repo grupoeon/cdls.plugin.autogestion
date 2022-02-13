@@ -26,7 +26,7 @@ class Autogestion_Controller {
 	const PAYMENT_FORM_ID          = 3372;
 	const BAJAS_FORM_ID            = 3373;
 	const MENU_ID                  = 13;
-	const CHANGE_PASSWORD_FORM_ID  = 4082;
+	const CHANGE_PASSWORD_FORM_ID  = 4084;
 
 	/**
 	 * The single instance of the class.

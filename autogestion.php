@@ -29,7 +29,7 @@ const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
 const DEBUG       = false;
-const MAINTENANCE = true;
+const MAINTENANCE = false;
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
