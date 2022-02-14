@@ -75,10 +75,4 @@ abstract class Form {
 
 	}
 
-	public function post( $key ) {
-		if ( empty( $_POST[ $key ] ) ) {
-			return null;
-		}
-		return sanitize_text_field( wp_unslash( $_POST[ $key ] ) );
-	}
 }

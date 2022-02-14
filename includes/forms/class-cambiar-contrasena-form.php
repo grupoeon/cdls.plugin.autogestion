@@ -85,12 +85,19 @@ class Cambiar_Contrasena_Form extends Form {
 
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 */
 	public function submit() {
 
 		$client_id   = API()->client_id();
 		$client_data = API()->get_client_data();
-		$password    = $_POST['contrasena_nueva'];
-		$hash        = password_hash( $password, PASSWORD_DEFAULT );
+		/**
+		 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		 */
+		$password = wp_unslash( $_POST['contrasena_nueva'] );
+		$hash     = password_hash( $password, PASSWORD_DEFAULT );
 
 		DB()->query(
 			'UPDATE clientes 

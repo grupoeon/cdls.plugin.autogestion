@@ -74,12 +74,19 @@ class Iniciar_Sesion_Form extends Form {
 
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 */
 	public function submit() {
 
-		$response = AG()->log_in(
-			$this->post( 'email' ),
-			$this->post( 'password' )
-		);
+		$email = sanitize_email( wp_unslash( $_POST['email'] ) );
+		/**
+		 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		 */
+		$password = wp_unslash( $_POST['password'] );
+
+		$response = AG()->log_in( $email, $password );
 
 		if ( $response['success'] ) {
 			wp_safe_redirect( get_permalink( AG()::PROFILE_FORM_ID ), 302 );

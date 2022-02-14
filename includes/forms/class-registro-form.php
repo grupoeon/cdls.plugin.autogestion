@@ -70,10 +70,31 @@ class Registro_Form extends Form {
 
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 * @phpcs:disable WordPress.PHP.DisallowShortTernary.Found
+	 */
 	public function submit() {
 
 		$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
 		$hash     = password_hash( $password, PASSWORD_DEFAULT );
+
+		$id_tipo_documento   = intval( wp_unslash( $_POST['id_tipo_documento'] ) );
+		$documento           = intval( wp_unslash( $_POST['documento'] ) );
+		$apellido            = sanitize_text_field( wp_unslash( $_POST['apellido'] ) );
+		$nombre              = sanitize_text_field( wp_unslash( $_POST['nombre'] ) );
+		$razon_social        = sanitize_text_field( wp_unslash( $_POST['razon_social'] ) );
+		$correo              = sanitize_email( wp_unslash( $_POST['correo'] ) );
+		$telefono            = intval( wp_unslash( $_POST['telefono'] ) );
+		$calle               = sanitize_text_field( wp_unslash( $_POST['calle'] ) );
+		$nro_calle           = sanitize_text_field( wp_unslash( $_POST['nro_calle'] ) );
+		$piso                = sanitize_text_field( wp_unslash( $_POST['piso'] ) );
+		$departamento        = sanitize_text_field( wp_unslash( $_POST['departamento'] ) );
+		$codigo_postal       = intval( wp_unslash( $_POST['codigo_postal'] ) );
+		$id_provincia        = intval( wp_unslash( $_POST['id_provincia'] ) );
+		$id_localidad        = intval( wp_unslash( $_POST['id_localidad'] ) );
+		$id_condicion_fiscal = intval( wp_unslash( $_POST['id_condicion_fiscal'] ) );
 
 		DB()->query(
 			'INSERT INTO clientes  (
@@ -116,27 +137,27 @@ class Registro_Form extends Form {
 				:contrasena
 			)',
 			array(
-				'id_tipo_documento'   => $_POST['id_tipo_documento'],
-				'documento'           => $_POST['documento'],
-				'apellido'            => $_POST['apellido'],
-				'nombre'              => $_POST['nombre'],
-				'razon_social'        => $_POST['razon_social'],
-				'correo'              => $_POST['correo'],
-				'telefono'            => $_POST['telefono'],
-				'calle'               => $_POST['calle'],
-				'nro_calle'           => $_POST['nro_calle'],
-				'piso'                => $_POST['piso'],
-				'departamento'        => $_POST['departamento'],
-				'codigo_postal'       => $_POST['codigo_postal'],
-				'id_provincia'        => $_POST['id_provincia'],
-				'id_localidad'        => $_POST['id_localidad'],
-				'id_condicion_fiscal' => $_POST['id_condicion_fiscal'],
+				'id_tipo_documento'   => $id_tipo_documento,
+				'documento'           => $documento,
+				'apellido'            => $apellido,
+				'nombre'              => $nombre,
+				'razon_social'        => $razon_social,
+				'correo'              => $correo,
+				'telefono'            => $telefono,
+				'calle'               => $calle,
+				'nro_calle'           => $nro_calle,
+				'piso'                => $piso,
+				'departamento'        => $departamento,
+				'codigo_postal'       => $codigo_postal,
+				'id_provincia'        => $id_provincia,
+				'id_localidad'        => $id_localidad,
+				'id_condicion_fiscal' => $id_condicion_fiscal,
 				'contrasena'          => $hash,
 			)
 		);
 
 		wp_mail(
-			$_POST['correo'],
+			$correo,
 			MSG()::MAIL_REGISTRATION_SUBJECT,
 			sprintf( MSG()::MAIL_REGISTRATION_CONTENT, $password )
 		);

@@ -117,9 +117,18 @@ class Recuperar_Contrasena_Form extends Form {
 
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 * @phpcs:disable WordPress.PHP.DisallowShortTernary.Found
+	 */
 	public function submit() {
 
-		$client_id = DB()->verify_identity( $_POST['documento'], $_POST['dominio'] );
+		$documento        = intval( wp_unslash( $_POST['documento'] ) );
+		$dominio          = sanitize_text_field( wp_unslash( $_POST['dominio'] ) );
+		$correo           = sanitize_email( wp_unslash( $_POST['correo'] ) );
+
+		$client_id = DB()->verify_identity( $documento, $dominio );
 
 		if ( ! $client_id ) {
 
@@ -127,7 +136,7 @@ class Recuperar_Contrasena_Form extends Form {
 
 		} else {
 
-			if ( DB()->email_exists( $_POST['correo'] ) ) {
+			if ( DB()->email_exists( $correo ) ) {
 
 				$this->error_message( MSG()::EMAIL_EXISTS );
 
@@ -146,14 +155,14 @@ class Recuperar_Contrasena_Form extends Form {
 					WHERE id = :id',
 					array(
 						'id'         => $client_id,
-						'correo'     => $_POST['correo'],
+						'correo'     => $correo,
 						'contrasena' => $hash,
-						'fecha'      => date( 'Y-m-d H:i:s' ),
+						'fecha'      => TIME()->now( 'Y-m-d H:i:s' ),
 					)
 				);
 
 				wp_mail(
-					$_POST['correo'],
+					$correo,
 					MSG()::MAIL_REGISTRATION_SUBJECT,
 					sprintf( MSG()::MAIL_REGISTRATION_CONTENT, $password )
 				);

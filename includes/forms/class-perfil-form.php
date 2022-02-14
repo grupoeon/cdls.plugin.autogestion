@@ -59,7 +59,7 @@ class Perfil_Form extends Form {
 				'options'  => API()->get_document_types(),
 				'selected' => 'Seleccione',
 				'value'    => intval( $client_data['id_tipo_documento'] ),
-				// 'string'   => 'disabled="true"',
+				// Should be readonly, but conflict with registro-form where it shouldn't.
 			)
 		);
 
@@ -68,7 +68,7 @@ class Perfil_Form extends Form {
 				'name'  => 'documento',
 				'label' => 'Número de Documento',
 				'value' => $client_data['documento'],
-				// 'string' => 'disabled="true"',
+				// Should be readonly, but conflict with registro-form where it shouldn't.
 			)
 		);
 
@@ -188,11 +188,22 @@ class Perfil_Form extends Form {
 	public static function get_validation_rules( $data ) {
 
 		return array(
-			'required'                     => array( 'id_tipo_documento', 'documento', 'id_condicion_fiscal', 'correo', 'telefono', 'calle', 'id_provincia', 'id_localidad', 'codigo_postal' ),
+			'required'                     => array(
+				'id_tipo_documento',
+				'documento',
+				'id_condicion_fiscal',
+				'correo',
+				'telefono',
+				'calle',
+				'id_provincia',
+				'id_localidad',
+				'codigo_postal',
+			),
 			'in'                           => array(
 				array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
 				array( 'id_provincia', array_keys( API()->get_provinces() ) ),
 				array( 'id_localidad', array_keys( API()->get_cities() ) ),
+				array( 'id_condicion_fiscal', array_keys( API()->get_fiscal_conditions() ) ),
 			),
 			'numeric'                      => array( 'documento', 'telefono', 'nro_calle' ),
 			'optional'                     => array( 'nro_calle', 'piso', 'departamento' ),
@@ -201,11 +212,6 @@ class Perfil_Form extends Form {
 			),
 			'fiscalCondition'              => array( 'id_condicion_fiscal' ),
 			'email'                        => array( 'correo' ),
-			'regex'                        => array(
-				array( 'nombre', "/[\w \.']+/" ),
-				array( 'apellido', "/[\w \.']+/" ),
-				array( 'razon_social', "/[\w \.\d']+/" ),
-			),
 			'lengthMax'                    => array(
 				array( 'telefono', 10 ),
 				array( 'calle', 40 ),
@@ -213,12 +219,47 @@ class Perfil_Form extends Form {
 				array( 'piso', 3 ),
 				array( 'departamento', 3 ),
 				array( 'codigo_postal', 4 ),
-				array( 'apellido', 50 ),
-				array( 'nombre', 50 ),
-				array( 'razon_social', 80 ),
 			),
 			'document_exists_except_owner' => array( 'documento' ),
 			'email_exists_except_owner'    => array( 'correo' ),
+			V()->when(
+				$data,
+				array(
+					'required' => array( 'id_tipo_documento' ),
+					'in'       => array(
+						array( 'id_tipo_documento', array( 5 ) ),
+					),
+				),
+				array(
+					'required'  => array( 'nombre', 'apellido' ),
+					'lengthMax' => array(
+						array( 'apellido', 50 ),
+						array( 'nombre', 50 ),
+					),
+					'regex'     => array(
+						array( 'nombre', "/[\w \.']+/" ),
+						array( 'apellido', "/[\w \.']+/" ),
+					),
+				)
+			),
+			V()->when(
+				$data,
+				array(
+					'required' => array( 'id_tipo_documento' ),
+					'in'       => array(
+						array( 'id_tipo_documento', array( 2 ) ),
+					),
+				),
+				array(
+					'required'  => array( 'razon_social' ),
+					'lengthMax' => array(
+						array( 'razon_social', 80 ),
+					),
+					'regex'     => array(
+						array( 'razon_social', "/[\w \.\d']+/" ),
+					),
+				)
+			),
 		);
 
 	}
@@ -235,50 +276,80 @@ class Perfil_Form extends Form {
 
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 * @phpcs:disable WordPress.PHP.DisallowShortTernary.Found
+	 */
 	public function submit() {
 
-		DB()->query(
-			'UPDATE clientes 
-			SET 
-				apellido = :apellido,
-				nombre = :nombre,
-				razon_social = :razon_social,
-				correo = :correo,
-				telefono = :telefono,
-				calle = :calle,
-				nro_calle = :nro_calle,
-				piso = :piso,
-				departamento = :departamento,
-				codigo_postal = :codigo_postal,
-				id_provincia = :id_provincia,
-				id_localidad = :id_localidad,
-				id_condicion_fiscal = :id_condicion_fiscal
-			WHERE id = :id_cliente',
-			array(
-				'id_cliente'          => API()->client_id(),
-				'apellido'            => $_POST['apellido'],
-				'nombre'              => $_POST['nombre'],
-				'razon_social'        => $_POST['razon_social'],
-				'correo'              => $_POST['correo'],
-				'telefono'            => $_POST['telefono'],
-				'calle'               => $_POST['calle'],
-				'nro_calle'           => $_POST['nro_calle'],
-				'piso'                => $_POST['piso'],
-				'departamento'        => $_POST['departamento'],
-				'codigo_postal'       => $_POST['codigo_postal'],
-				'id_provincia'        => $_POST['id_provincia'],
-				'id_localidad'        => $_POST['id_localidad'],
-				'id_condicion_fiscal' => $_POST['id_condicion_fiscal'],
-			)
-		);
+		$apellido            = sanitize_text_field( wp_unslash( $_POST['apellido'] ) );
+		$nombre              = sanitize_text_field( wp_unslash( $_POST['nombre'] ) );
+		$razon_social        = sanitize_text_field( wp_unslash( $_POST['razon_social'] ) );
+		$correo              = sanitize_email( wp_unslash( $_POST['correo'] ) );
+		$telefono            = intval( wp_unslash( $_POST['telefono'] ) );
+		$calle               = sanitize_text_field( wp_unslash( $_POST['calle'] ) );
+		$nro_calle           = sanitize_text_field( wp_unslash( $_POST['nro_calle'] ) );
+		$piso                = sanitize_text_field( wp_unslash( $_POST['piso'] ) );
+		$departamento        = sanitize_text_field( wp_unslash( $_POST['departamento'] ) );
+		$codigo_postal       = intval( wp_unslash( $_POST['codigo_postal'] ) );
+		$id_provincia        = intval( wp_unslash( $_POST['id_provincia'] ) );
+		$id_localidad        = intval( wp_unslash( $_POST['id_localidad'] ) );
+		$id_condicion_fiscal = intval( wp_unslash( $_POST['id_condicion_fiscal'] ) );
+
+		try {
+			DB()->query(
+				'UPDATE clientes 
+				SET 
+					apellido = :apellido,
+					nombre = :nombre,
+					razon_social = :razon_social,
+					correo = :correo,
+					telefono = :telefono,
+					calle = :calle,
+					nro_calle = :nro_calle,
+					piso = :piso,
+					departamento = :departamento,
+					codigo_postal = :codigo_postal,
+					id_provincia = :id_provincia,
+					id_localidad = :id_localidad,
+					id_condicion_fiscal = :id_condicion_fiscal
+				WHERE id = :id_cliente',
+				array(
+					'id_cliente'          => API()->client_id(),
+					'apellido'            => $apellido,
+					'nombre'              => $nombre,
+					'razon_social'        => $razon_social,
+					'correo'              => $correo,
+					'telefono'            => $telefono,
+					'calle'               => $calle,
+					'nro_calle'           => $nro_calle,
+					'piso'                => $piso,
+					'departamento'        => $departamento,
+					'codigo_postal'       => $codigo_postal,
+					'id_provincia'        => $id_provincia,
+					'id_localidad'        => $id_localidad,
+					'id_condicion_fiscal' => $id_condicion_fiscal,
+				)
+			);
+		} catch ( \PDOException $e ) {
+
+			$this->error_message( MSG()::DATABASE_ERROR );
+			return;
+
+		}
 
 		$client_data         = API()->get_client_data();
-		$tipo_documento      = $client_data['id_tipo_documento'];
+		$tipo_documento      = intval( $client_data['id_tipo_documento'] );
 		$documento           = $client_data['documento'];
 		$correo              = $client_data['correo'];
-		$fecha_modificacion  = date( 'Ymdhis' );
-		$apellido            = $tipo_documento == 2 ? $client_data['razon_social'] : $client_data['apellido'];
-		$nombre              = $tipo_documento == 5 ? $client_data['nombre'] : '';
+		$fecha_modificacion  = TIME()->now( 'Ymdhis' );
+		$apellido            = 2 === $tipo_documento
+								? $client_data['razon_social']
+								: $client_data['apellido'];
+		$nombre              = 5 === $tipo_documento
+								? $client_data['nombre']
+								: '';
 		$telefono            = $client_data['telefono'];
 		$calle               = $client_data['calle'];
 		$nro_calle           = $client_data['nro_calle'];
