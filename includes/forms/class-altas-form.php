@@ -183,39 +183,38 @@ class Altas_Form extends Form {
 		$nro_medio_de_pago       = $nro_tarjeta ?: $nro_cbu;
 		$vencimiento_tarjeta_ano = intval( wp_unslash( $_POST['vencimiento_tarjeta_ano'] ) );
 		$vencimiento_tarjeta_mes = sanitize_text_field( wp_unslash( $_POST['vencimiento_tarjeta_mes'] ) );
-		$vencimiento_tarjeta     = $vencimiento_tarjeta_ano . $vencimiento_tarjeta_mes;
+		$vencimiento_tarjeta     = $vencimiento_tarjeta_ano . $vencimiento_tarjeta_mes ?: null;
 		$nombre_medio_de_pago    = sanitize_text_field( wp_unslash( $_POST['nombre'] ) );
 		$documento_medio_de_pago = intval( wp_unslash( $_POST['documento'] ) );
 
 		try {
 			DB()->insert(
-				<<<SQL
-	INSERT INTO gestiones_altas (
-		nro_gestion,
-		id_cliente,
-		dominio,
-		marca,
-		modelo,
-		id_categoria,
-		id_medio_de_pago,
-		nro_medio_de_pago,
-		vencimiento_tarjeta,
-		nombre_medio_de_pago,
-		documento_medio_de_pago  )
-	VALUES (
-		:nro_gestion,
-		:id_cliente,
-		:dominio,
-		:marca,
-		:modelo,
-		:id_categoria,
-		:id_medio_de_pago,
-		:nro_medio_de_pago,
-		:vencimiento_tarjeta,
-		:nombre_medio_de_pago,
-		:documento_medio_de_pago
-	);
-SQL,
+				'INSERT INTO gestiones_altas (
+					nro_gestion,
+					id_cliente,
+					dominio,
+					marca,
+					modelo,
+					id_categoria,
+					id_medio_de_pago,
+					nro_medio_de_pago,
+					vencimiento_tarjeta,
+					nombre_medio_de_pago,
+					documento_medio_de_pago  )
+				VALUES (
+					:nro_gestion,
+					:id_cliente,
+					:dominio,
+					:marca,
+					:modelo,
+					:id_categoria,
+					:id_medio_de_pago,
+					:nro_medio_de_pago,
+					:vencimiento_tarjeta,
+					:nombre_medio_de_pago,
+					:documento_medio_de_pago
+				);
+			',
 				array(
 					'nro_gestion'             => $procedure_id,
 					'id_cliente'              => API()->client_id(),

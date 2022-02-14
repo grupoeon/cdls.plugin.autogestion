@@ -124,9 +124,9 @@ class Recuperar_Contrasena_Form extends Form {
 	 */
 	public function submit() {
 
-		$documento        = intval( wp_unslash( $_POST['documento'] ) );
-		$dominio          = sanitize_text_field( wp_unslash( $_POST['dominio'] ) );
-		$correo           = sanitize_email( wp_unslash( $_POST['correo'] ) );
+		$documento = intval( wp_unslash( $_POST['documento'] ) );
+		$dominio   = sanitize_text_field( wp_unslash( $_POST['dominio'] ) );
+		$correo    = sanitize_email( wp_unslash( $_POST['correo'] ) );
 
 		$client_id = DB()->verify_identity( $documento, $dominio );
 
@@ -145,7 +145,7 @@ class Recuperar_Contrasena_Form extends Form {
 				$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
 				$hash     = password_hash( $password, PASSWORD_DEFAULT );
 
-				DB()->query(
+				DB()->insert(
 					'UPDATE clientes 
 					SET 
 						correo = :correo,

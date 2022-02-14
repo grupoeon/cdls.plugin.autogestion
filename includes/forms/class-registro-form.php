@@ -96,65 +96,73 @@ class Registro_Form extends Form {
 		$id_localidad        = intval( wp_unslash( $_POST['id_localidad'] ) );
 		$id_condicion_fiscal = intval( wp_unslash( $_POST['id_condicion_fiscal'] ) );
 
-		DB()->query(
-			'INSERT INTO clientes  (
-				id_tipo_documento,
-				documento,
-				apellido,
-				nombre,
-				razon_social,
-				correo,
-				telefono,
-				calle,
-				nro_calle,
-				piso,
-				departamento,
-				codigo_postal,
-				id_provincia,
-				id_localidad,
-				id_condicion_fiscal,
-				cuenta_corriente,
-				registrado,
-				contrasena
-			) VALUES (
-				:id_tipo_documento,
-				:documento,
-				:apellido,
-				:nombre,
-				:razon_social,
-				:correo,
-				:telefono,
-				:calle,
-				:nro_calle,
-				:piso,
-				:departamento,
-				:codigo_postal,
-				:id_provincia,
-				:id_localidad,
-				:id_condicion_fiscal,
-				0,
-				1,
-				:contrasena
-			)',
-			array(
-				'id_tipo_documento'   => $id_tipo_documento,
-				'documento'           => $documento,
-				'apellido'            => $apellido,
-				'nombre'              => $nombre,
-				'razon_social'        => $razon_social,
-				'correo'              => $correo,
-				'telefono'            => $telefono,
-				'calle'               => $calle,
-				'nro_calle'           => $nro_calle,
-				'piso'                => $piso,
-				'departamento'        => $departamento,
-				'codigo_postal'       => $codigo_postal,
-				'id_provincia'        => $id_provincia,
-				'id_localidad'        => $id_localidad,
-				'id_condicion_fiscal' => $id_condicion_fiscal,
-				'contrasena'          => $hash,
-			)
-		);
+		try {
+
+			DB()->insert(
+				'INSERT INTO clientes  (
+					id_tipo_documento,
+					documento,
+					apellido,
+					nombre,
+					razon_social,
+					correo,
+					telefono,
+					calle,
+					nro_calle,
+					piso,
+					departamento,
+					codigo_postal,
+					id_provincia,
+					id_localidad,
+					id_condicion_fiscal,
+					cuenta_corriente,
+					registrado,
+					contrasena
+				) VALUES (
+					:id_tipo_documento,
+					:documento,
+					:apellido,
+					:nombre,
+					:razon_social,
+					:correo,
+					:telefono,
+					:calle,
+					:nro_calle,
+					:piso,
+					:departamento,
+					:codigo_postal,
+					:id_provincia,
+					:id_localidad,
+					:id_condicion_fiscal,
+					0,
+					1,
+					:contrasena
+				)',
+				array(
+					'id_tipo_documento'   => $id_tipo_documento,
+					'documento'           => $documento,
+					'apellido'            => $apellido,
+					'nombre'              => $nombre,
+					'razon_social'        => $razon_social,
+					'correo'              => $correo,
+					'telefono'            => $telefono,
+					'calle'               => $calle,
+					'nro_calle'           => $nro_calle,
+					'piso'                => $piso,
+					'departamento'        => $departamento,
+					'codigo_postal'       => $codigo_postal,
+					'id_provincia'        => $id_provincia,
+					'id_localidad'        => $id_localidad,
+					'id_condicion_fiscal' => $id_condicion_fiscal,
+					'contrasena'          => $hash,
+				)
+			);
+		} catch ( \PDOException $e ) {
+
+			$this->error_message( MSG()::DATABASE_ERROR );
+			return;
+
+		}
 
 		wp_mail(
 			$correo,

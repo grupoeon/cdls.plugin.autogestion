@@ -187,41 +187,43 @@ class Perfil_Form extends Form {
 
 	public static function get_validation_rules( $data ) {
 
-		return array(
-			'required'                     => array(
-				'id_tipo_documento',
-				'documento',
-				'id_condicion_fiscal',
-				'correo',
-				'telefono',
-				'calle',
-				'id_provincia',
-				'id_localidad',
-				'codigo_postal',
+		return array_merge_recursive(
+			array(
+				'required'                     => array(
+					'id_tipo_documento',
+					'documento',
+					'id_condicion_fiscal',
+					'correo',
+					'telefono',
+					'calle',
+					'id_provincia',
+					'id_localidad',
+					'codigo_postal',
+				),
+				'in'                           => array(
+					array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
+					array( 'id_provincia', array_keys( API()->get_provinces() ) ),
+					array( 'id_localidad', array_keys( API()->get_cities() ) ),
+					array( 'id_condicion_fiscal', array_keys( API()->get_fiscal_conditions() ) ),
+				),
+				'numeric'                      => array( 'documento', 'telefono', 'nro_calle' ),
+				'optional'                     => array( 'nro_calle', 'piso', 'departamento' ),
+				'lengthBetween'                => array(
+					array( 'documento', 7, 11 ),
+				),
+				'fiscalCondition'              => array( 'id_condicion_fiscal' ),
+				'email'                        => array( 'correo' ),
+				'lengthMax'                    => array(
+					array( 'telefono', 10 ),
+					array( 'calle', 40 ),
+					array( 'nro_calle', 6 ),
+					array( 'piso', 3 ),
+					array( 'departamento', 3 ),
+					array( 'codigo_postal', 4 ),
+				),
+				'document_exists_except_owner' => array( 'documento' ),
+				'email_exists_except_owner'    => array( 'correo' ),
 			),
-			'in'                           => array(
-				array( 'id_tipo_documento', array_keys( API()->get_document_types() ) ),
-				array( 'id_provincia', array_keys( API()->get_provinces() ) ),
-				array( 'id_localidad', array_keys( API()->get_cities() ) ),
-				array( 'id_condicion_fiscal', array_keys( API()->get_fiscal_conditions() ) ),
-			),
-			'numeric'                      => array( 'documento', 'telefono', 'nro_calle' ),
-			'optional'                     => array( 'nro_calle', 'piso', 'departamento' ),
-			'lengthBetween'                => array(
-				array( 'documento', 7, 11 ),
-			),
-			'fiscalCondition'              => array( 'id_condicion_fiscal' ),
-			'email'                        => array( 'correo' ),
-			'lengthMax'                    => array(
-				array( 'telefono', 10 ),
-				array( 'calle', 40 ),
-				array( 'nro_calle', 6 ),
-				array( 'piso', 3 ),
-				array( 'departamento', 3 ),
-				array( 'codigo_postal', 4 ),
-			),
-			'document_exists_except_owner' => array( 'documento' ),
-			'email_exists_except_owner'    => array( 'correo' ),
 			V()->when(
 				$data,
 				array(
@@ -298,7 +300,7 @@ class Perfil_Form extends Form {
 		$id_condicion_fiscal = intval( wp_unslash( $_POST['id_condicion_fiscal'] ) );
 
 		try {
-			DB()->query(
+			DB()->insert(
 				'UPDATE clientes 
 				SET 
 					apellido = :apellido,

@@ -103,12 +103,13 @@ SQL,
 			$sql .= ' AND id != :client_id';
 		}
 		$stmt = $db->prepare( $sql );
-		$stmt->execute(
-			array(
-				'correo'    => $email,
-				'client_id' => $client_id,
-			)
+		$args = array(
+			'correo' => $email,
 		);
+		if ( $client_id ) {
+			$args['client_id'] = $client_id;
+		}
+		$stmt->execute( $args );
 		return (bool) $stmt->fetchColumn();
 	}
 

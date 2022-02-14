@@ -99,7 +99,7 @@ class Cambiar_Contrasena_Form extends Form {
 		$password = wp_unslash( $_POST['contrasena_nueva'] );
 		$hash     = password_hash( $password, PASSWORD_DEFAULT );
 
-		DB()->query(
+		DB()->insert(
 			'UPDATE clientes 
 			SET 
 				contrasena = :contrasena
