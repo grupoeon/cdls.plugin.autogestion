@@ -43,6 +43,19 @@ class API_Controller {
 		return self::$_instance;
 	}
 
+	public function get_receipt_url( $receipt ) {
+
+		$orden_venta   = str_pad( $receipt['orden_venta'], 8, '0', STR_PAD_LEFT );
+		$punto_venta   = str_pad( $receipt['punto_venta'], 3, '0', STR_PAD_LEFT );
+		$letra_factura = $receipt['tipo_factura'];
+		$nro_factura   = str_pad( $receipt['nro_factura'], 8, '0', STR_PAD_LEFT );
+
+		$input = $orden_venta . $punto_venta . $letra_factura . $nro_factura;
+
+		return plugins_url( 'includes/receipts/receipts.php', ROOT_FILE ) . '?uid=' . md5( $input );
+
+	}
+
 	/**
 	 * Logs in the user
 	 *
@@ -208,6 +221,10 @@ SQL
 	 */
 	public function get_fiscal_conditions() {
 		return $this->rows_to_key_value( DB()->get_fiscal_conditions() );
+	}
+
+	public function get_stations() {
+		return $this->rows_to_key_value( DB()->get_stations() );
 	}
 
 	/**

@@ -27,6 +27,8 @@ class Autogestion_Controller {
 	const BAJAS_FORM_ID            = 3373;
 	const MENU_ID                  = 13;
 	const CHANGE_PASSWORD_FORM_ID  = 4084;
+	const RECEIPTS_MENU_ID         = 4269;
+	const TRANSITS_MENU_ID         = 4273;
 
 	/**
 	 * The single instance of the class.
@@ -187,7 +189,12 @@ class Autogestion_Controller {
 
 				if ( in_array(
 					$menu_item->ID,
-					array( self::PAYMENT_FORM_ID, self::BAJAS_FORM_ID ),
+					array(
+						self::PAYMENT_FORM_ID,
+						self::BAJAS_FORM_ID,
+						self::RECEIPTS_MENU_ID,
+						self::TRANSITS_MENU_ID,
+					),
 					true
 				) && empty( API()->client_number() ) ) {
 					return false;

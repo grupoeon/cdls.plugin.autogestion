@@ -29,7 +29,7 @@ const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
 const DEBUG       = false;
-const MAINTENANCE = true;
+const MAINTENANCE = false;
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
@@ -42,3 +42,5 @@ require_once ROOT_DIR . '/includes/class-form-controller.php';
 require_once ROOT_DIR . '/includes/class-api-controller.php';
 require_once ROOT_DIR . '/includes/class-txt-controller.php';
 require_once ROOT_DIR . '/includes/class-autogestion-controller.php';
+require_once ROOT_DIR . '/includes/shortcodes/class-receipts-shortcode.php';
+require_once ROOT_DIR . '/includes/shortcodes/class-transits-shortcode.php';

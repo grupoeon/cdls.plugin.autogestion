@@ -198,6 +198,14 @@ SQL,
 		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
 	}
 
+
+	public function get_stations() {
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT * FROM _estaciones' );
+		$stmt->execute();
+		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+	}
+
 	public function get_vehicle_categories( $no_bikes = true ) {
 		$db   = $this->db();
 		$stmt = $db->prepare(
