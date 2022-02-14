@@ -18,44 +18,66 @@ class Testing_Form extends Form {
 
 		?>
 
+		<?php
+		echo $this->form->open(
+			$this->form->id,
+			$this->form->name,
+			'',
+			'POST',
+			'class="cdls-form"'
+		);
+
+		?>
+
 		<section class="cdls-form">
 			<section class="section">
 				<h1>Testing</h1>
 				<section class="fields">
 				<?php $this->output_form_fields(); ?>
+				<?php echo $this->form->input_hidden( 'cdls_form_id', $this->form->id ); ?>
+				<?php echo $this->form->input_submit(); ?>
 				</section>
 			</section>
 		</section>
 		
 		<?php
 
+		echo $this->form->close();
+
 	}
 
 	public function output_form_fields() {
 
-		$this->form->input_text();
+		echo $this->form->input_text( 'some_text', 'Some Text' );
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 
-		return array(
-			'required' => array( 'email', 'password' ),
-			'email'    => array( 'email' ),
-		);
+		return array();
 
 	}
 
 	public static function get_validation_labels() {
 
-		return array(
-			'email'    => 'Correo electrónico',
-			'password' => 'Contraseña',
-		);
+		return array();
 
 	}
 
 	public function submit() {
+
+		$wow = null;
+		try {
+
+			$wow = DB()->query2( 'SELECT some_fake_field FROM table_that_doesnt_exists' );
+		} catch ( \PDOException  $e ) {
+			$this->error_message( 'error' );
+			return;
+		}
+
+		ob_start();
+		var_dump( $wow );
+		$this->success_message( ob_get_clean() );
 
 	}
 

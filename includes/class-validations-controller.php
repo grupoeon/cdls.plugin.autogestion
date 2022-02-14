@@ -28,10 +28,10 @@ class Validations_Controller {
 		Validator::addRule(
 			'fiscalCondition',
 			function( $field, $value, array $params, array $fields ) {
-				if ( $fields['id_tipo_documento'] == 5 ) {
-					return in_array( $value, array( 1 ) );
+				if ( 5 === intval( $fields['id_tipo_documento'] ) ) {
+					return in_array( intval( $value ), array( 1 ), true );
 				} else {
-					return in_array( $value, array( 2, 3, 5 ) );
+					return in_array( intval( $value ), array( 2, 3, 5 ), true );
 				}
 				return false;
 			},
@@ -94,27 +94,25 @@ class Validations_Controller {
 			MSG()::PASSWORD_NOT_MATCH
 		);
 
-		Validator::addRule(
-			'required_if_cbu',
-			function( $field, $value, array $params, array $fields ) {
-				if ( 9 == $fields['id_medio_de_pago'] ) {
-					return ! empty( $value );
-				}
-				return true;
-			},
-			'es requerido'
-		);
+	}
 
-		Validator::addRule(
-			'required_if_tarjeta',
-			function( $field, $value, array $params, array $fields ) {
-				if ( intval( $fields['id_medio_de_pago'] ) <= 8 ) {
-					return ! empty( $value );
-				}
-				return true;
-			},
-			'es requerido'
-		);
+	/**
+	 * @phpcs:disable WordPress.PHP.DisallowShortTernary.Found
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 */
+	public function when( $data = array(), $conditions, $then_rules, $else_rules = array() ) {
+
+		$data = $data ?: $_POST;
+
+		$condition_validator = new \Valitron\Validator( $data );
+		$condition_validator->rules( $conditions );
+		$conditions_passed = $condition_validator->validate();
+
+		if ( $conditions_passed ) {
+			return $then_rules;
+		}
+
+		return $else_rules;
 
 	}
 
@@ -123,8 +121,8 @@ class Validations_Controller {
 /**
  * @phpcs:disable WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
  */
-function VALID() {
+function V() {
 	return Validations_Controller::instance();
 }
 
-VALID();
+V();

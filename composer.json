@@ -1,6 +1,7 @@
 {
     "require": {
         "formr/formr": "^1.4",
-        "vlucas/valitron": "^1.4"
+        "vlucas/valitron": "^1.4",
+        "digitalnature/php-ref": "^1.3"
     }
 }

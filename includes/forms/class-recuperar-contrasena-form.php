@@ -90,7 +90,7 @@ class Recuperar_Contrasena_Form extends Form {
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 
 		return array(
 			'required'      => array( 'documento', 'dominio', 'correo', 'correo_confirmar' ),

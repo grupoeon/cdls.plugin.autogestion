@@ -185,7 +185,11 @@ class Autogestion_Controller {
 					return false;
 				}
 
-				if ( in_array( $menu_item->ID, array( self::PAYMENT_FORM_ID, self::BAJAS_FORM_ID ) ) && empty( API()->client_number() ) ) {
+				if ( in_array(
+					$menu_item->ID,
+					array( self::PAYMENT_FORM_ID, self::BAJAS_FORM_ID ),
+					true
+				) && empty( API()->client_number() ) ) {
 					return false;
 				}
 

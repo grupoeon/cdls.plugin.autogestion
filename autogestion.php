@@ -29,13 +29,14 @@ const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
 const DEBUG       = false;
-const MAINTENANCE = false;
+const MAINTENANCE = true;
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
 require_once ROOT_DIR . '/includes/enqueues.php';
 
 require_once ROOT_DIR . '/includes/class-messages-controller.php';
+require_once ROOT_DIR . '/includes/class-time-controller.php';
 require_once ROOT_DIR . '/includes/class-validations-controller.php';
 require_once ROOT_DIR . '/includes/class-form-controller.php';
 require_once ROOT_DIR . '/includes/class-api-controller.php';

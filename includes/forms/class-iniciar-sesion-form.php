@@ -56,7 +56,7 @@ class Iniciar_Sesion_Form extends Form {
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 
 		return array(
 			'required' => array( 'email', 'password' ),

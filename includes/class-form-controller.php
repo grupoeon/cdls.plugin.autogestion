@@ -59,6 +59,7 @@ class Form_Controller {
 		$form = new \Formr\Formr( 'bootstrap', 'hush' );
 
 		if ( $form->submitted() ) {
+
 			/**
 			 * @phpcs:disable WordPress.Security.NonceVerification.Missing
 			 */

@@ -185,7 +185,7 @@ class Perfil_Form extends Form {
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 
 		return array(
 			'required'                     => array( 'id_tipo_documento', 'documento', 'id_condicion_fiscal', 'correo', 'telefono', 'calle', 'id_provincia', 'id_localidad', 'codigo_postal' ),

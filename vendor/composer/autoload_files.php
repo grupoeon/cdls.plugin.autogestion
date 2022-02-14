@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '5640faacc2b60a961e5376b0effdd7ef' => $vendorDir . '/formr/formr/class.formr.php',
+    '7cca0da9604df282f16d129f538c9833' => $vendorDir . '/digitalnature/php-ref/ref.php',
 );

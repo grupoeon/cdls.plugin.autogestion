@@ -59,7 +59,7 @@ class Bajas_Form extends Form {
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 		return array(
 			'required'    => array( 'dominios' ),
 			'domainBajas' => array( 'dominios' ),
@@ -69,9 +69,15 @@ class Bajas_Form extends Form {
 		return array( 'dominios' => 'Dominio' );
 	}
 
+	/**
+	 * @phpcs:disable WordPress.Security.NonceVerification.Missing
+	 * @phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	 */
 	public function submit() {
 
 		$procedure_id = DB()->new_procedure( 2 );
+
+		$dominio = sanitize_text_field( wp_unslash( $_POST['dominios'] ) );
 
 		DB()->insert(
 			<<<SQL
@@ -89,7 +95,7 @@ SQL,
 			array(
 				'nro_gestion' => $procedure_id,
 				'nro_cliente' => API()->client_number(),
-				'dominio'     => $_POST['dominios'],
+				'dominio'     => $dominio,
 			)
 		);
 
@@ -97,8 +103,7 @@ SQL,
 		$tipo_documento = $client_data['id_tipo_documento'];
 		$documento      = $client_data['documento'];
 		$correo         = $client_data['correo'];
-		$dominio        = $_POST['dominios'];
-		$fecha_gestion  = date( 'Ymdhis' );
+		$fecha_gestion  = TIME()->now( 'Ymdhis' );
 
 		TXT()->generate( 'Bajas', "$tipo_documento;$documento;$correo;$dominio;$procedure_id;$fecha_gestion" );
 

@@ -119,7 +119,7 @@ class API_Controller {
 	public function get_baja_vehicles() {
 
 		return $this->rows_to_key_value(
-			DB()->fetchAll(
+			DB()->fetch_all(
 				<<<SQL
 			SELECT id,dominio FROM vehiculos 
 				WHERE id_estado_vehiculo IN (1,2,3,5) 
@@ -160,7 +160,7 @@ SQL
 
 		$form_handler = FORM()->get_form_handler( 'perfil', new \Formr\Formr() );
 
-		$v->rules( $form_handler::get_validation_rules() );
+		$v->rules( $form_handler::get_validation_rules( $client_data ) );
 
 		$v->labels( $form_handler::get_validation_labels() );
 

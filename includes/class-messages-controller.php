@@ -160,6 +160,10 @@ MSG;
 	es incorrecta.
 MSG;
 
+	const DATABASE_ERROR = <<<MSG
+	Ha ocurrido un error al intentar procesar tu solicitud, por favor, intentelo más tarde,
+MSG;
+
 }
 
 /**

@@ -50,10 +50,10 @@ class Registro_Form extends Form {
 
 	}
 
-	public static function get_validation_rules() {
+	public static function get_validation_rules( $data ) {
 
 		$profile_handler = FORM()->get_form_handler( 'perfil', new \Formr\Formr() );
-		$profile_rules   = $profile_handler::get_validation_rules();
+		$profile_rules   = $profile_handler::get_validation_rules( $data );
 		unset( $profile_rules['document_exists_except_owner'] );
 		unset( $profile_rules['email_exists_except_owner'] );
 		$profile_rules['document_exists'] = array( 'documento' );
