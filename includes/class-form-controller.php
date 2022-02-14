@@ -26,6 +26,7 @@ class Form_Controller {
 		'registro'             => __NAMESPACE__ . '\Registro_Form',
 		'recuperar-contrasena' => __NAMESPACE__ . '\Recuperar_Contrasena_Form',
 		'cambiar-contrasena'   => __NAMESPACE__ . '\Cambiar_Contrasena_Form',
+		'testing'              => __NAMESPACE__ . '\Testing_Form',
 	);
 
 
@@ -80,11 +81,11 @@ class Form_Controller {
 					return;
 				}
 
-				$valid = $handler->validate();
+				$validation = $handler->validate();
 
-				if ( true !== $valid ) {
+				if ( ! $validation['valid'] ) {
 
-					$this->add_error_messages_from_validation( $handler, $valid );
+					$this->add_error_messages_from_validation( $handler, $validation['errors'] );
 					return;
 
 				}

@@ -164,7 +164,13 @@ SQL
 
 		$v->labels( $form_handler::get_validation_labels() );
 
-		return $v->validate() ? true : $v->errors();
+		$valid  = $v->validate();
+		$errors = $v->errors();
+
+		return array(
+			'valid'  => $valid,
+			'errors' => $errors,
+		);
 
 	}
 

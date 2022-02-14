@@ -19,10 +19,10 @@ class Perfil_Form extends Form {
 
 		$this->form->required = '(nro_calle),(piso),(departamento)';
 
-		$complete_data = API()->is_client_data_complete();
+		$client_data_complete = API()->is_client_data_complete();
 
-		if ( true !== $complete_data ) {
-			FORM()->add_error_messages_from_validation( $this, $complete_data );
+		if ( ! $client_data_complete['valid'] ) {
+			FORM()->add_error_messages_from_validation( $this, $client_data_complete['errors'] );
 		}
 
 		echo $this->form->open(

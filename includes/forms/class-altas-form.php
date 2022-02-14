@@ -25,7 +25,7 @@ class Altas_Form extends Form {
 			'class="cdls-form"'
 		);
 
-		if ( true !== API()->is_client_data_complete() ) {
+		if ( ! API()->is_client_data_complete()['valid'] ) {
 			$this->error_message( MSG()::COMPLETE_PROFILE_INFO, true );
 		}
 
@@ -269,7 +269,7 @@ class Altas_Form extends Form {
 	}
 
 	public function current_user_can_submit() {
-		return AG()->is_client_logged_in() && API()->is_client_data_complete();
+		return AG()->is_client_logged_in() && API()->is_client_data_complete()['valid'];
 	}
 
 }

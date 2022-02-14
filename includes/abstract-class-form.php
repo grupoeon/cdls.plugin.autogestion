@@ -65,9 +65,13 @@ abstract class Form {
 
 		$v->labels( static::get_validation_labels() );
 
-		$valid = $v->validate() ? true : $v->errors();
+		$valid  = $v->validate();
+		$errors = $v->errors();
 
-		return $valid;
+		return array(
+			'valid'  => $valid,
+			'errors' => $errors,
+		);
 
 	}
 

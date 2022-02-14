@@ -27,7 +27,7 @@ class Bajas_Form extends Form {
 
 		$this->warning_message( MSG()::BAJA_WARNING, true );
 
-		if ( true !== API()->is_client_data_complete() ) {
+		if ( ! API()->is_client_data_complete()['valid'] ) {
 			$this->error_message( MSG()::COMPLETE_PROFILE_INFO, true );
 		}
 
@@ -113,7 +113,7 @@ SQL,
 	}
 
 	public function current_user_can_submit() {
-		return AG()->is_client_logged_in() && API()->is_client_data_complete();
+		return AG()->is_client_logged_in() && API()->is_client_data_complete()['valid'];
 	}
 
 }
