@@ -56,6 +56,12 @@ class API_Controller {
 
 	}
 
+	public function get_receipt_payment_url( $receipt ) {
+
+		return '/autogestion/realizar-un-pago?type=receipt&id=' . rawurlencode( $receipt['orden_venta'] );
+
+	}
+
 	/**
 	 * Logs in the user
 	 *
@@ -243,8 +249,8 @@ SQL
 	 * @param boolean $types Filter by payment types.
 	 * @return array
 	 */
-	public function get_payment_methods( $types = array() ) {
-		return $this->rows_to_key_value( DB()->get_payment_methods( $types ) );
+	public function get_payment_methods( $types = array(), $key = 'id' ) {
+		return $this->rows_to_key_value( DB()->get_payment_methods( $types ), $key );
 	}
 
 	/**

@@ -181,8 +181,8 @@ class Altas_Form extends Form {
 		$nro_cbu                 = sanitize_text_field( wp_unslash( $_POST['nro_cbu'] ) );
 		$nro_tarjeta             = sanitize_text_field( wp_unslash( $_POST['nro_tarjeta'] ) );
 		$nro_medio_de_pago       = $nro_tarjeta ?: $nro_cbu;
-		$vencimiento_tarjeta_ano = intval( wp_unslash( $_POST['vencimiento_tarjeta_ano'] ) );
-		$vencimiento_tarjeta_mes = sanitize_text_field( wp_unslash( $_POST['vencimiento_tarjeta_mes'] ) );
+		$vencimiento_tarjeta_ano = intval( wp_unslash( $_POST['vencimiento_tarjeta_ano'] ) ) ?: '';
+		$vencimiento_tarjeta_mes = sanitize_text_field( wp_unslash( $_POST['vencimiento_tarjeta_mes'] ) ) ?: '';
 		$vencimiento_tarjeta     = $vencimiento_tarjeta_ano . $vencimiento_tarjeta_mes ?: null;
 		$nombre_medio_de_pago    = sanitize_text_field( wp_unslash( $_POST['nombre'] ) );
 		$documento_medio_de_pago = intval( wp_unslash( $_POST['documento'] ) );

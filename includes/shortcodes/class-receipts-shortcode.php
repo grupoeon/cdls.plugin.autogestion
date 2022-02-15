@@ -46,7 +46,8 @@ class Receipts_Shortcode {
 
 		$receipts = DB()->query(
 			'SELECT * FROM `facturas`
-				WHERE nro_cliente = :nro_cliente 
+				LEFT JOIN facturas_morosas ON facturas.orden_venta = facturas_morosas.orden_venta
+				WHERE facturas.nro_cliente = :nro_cliente 
 				ORDER BY vencimiento_factura DESC,
 						nro_factura DESC
 			',
@@ -78,6 +79,9 @@ class Receipts_Shortcode {
 					<th>Vencimiento</th>
 					<th>Monto</th>
 					<th>Descargar</th>
+					<?php if ( current_user_can( 'manage_options' ) ) : ?>
+					<th>Pagar</th>
+					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -87,7 +91,14 @@ class Receipts_Shortcode {
 				foreach ( $receipts as $receipt ) :
 
 					?>
-					<tr>
+					<tr
+						<?php
+						if ( 'R' === $receipt['estado_deuda']
+									&& 0 === intval( $receipt['abonado'] ) ) :
+							?>
+						style="background-color: #ffd4d4;"
+						<?php endif; ?>
+					>
 						<td><?php echo esc_html( $receipt['nro_factura'] ); ?></td>
 						<td><?php echo esc_html( $receipt['tipo_factura'] ); ?></td>
 						<td><?php echo esc_html( $receipt['vencimiento_factura'] ); ?></td>
@@ -97,6 +108,21 @@ class Receipts_Shortcode {
 								<i class="fas fa-download"></i>
 							</a>
 						</td>
+						<?php if ( current_user_can( 'manage_options' ) ) : ?>
+						<td>
+							<?php
+							if ( 'R' === $receipt['estado_deuda']
+										&& 0 === intval( $receipt['abonado'] ) ) :
+								?>
+							<a href="<?php echo esc_html( API()->get_receipt_payment_url( $receipt ) ); ?>">
+								<i class="fas fa-credit-card"></i>
+								Pagar
+							</a>
+							<?php else : ?>
+							(Al día)
+							<?php endif; ?>
+						</td>
+						<?php endif; ?>
 					</tr>
 					<?php
 

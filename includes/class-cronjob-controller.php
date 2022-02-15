@@ -12,6 +12,9 @@ defined( 'ABSPATH' ) || die;
 
 class Cronjob_Controller {
 
+	const CRONJOBS = array(
+		'modificaciones' => __NAMESPACE__ . '\Modificaciones_Cronjob',
+	);
 
 	protected static $_instance = null;
 
@@ -24,18 +27,14 @@ class Cronjob_Controller {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'schedule' ) );
-		add_action( 'cdls_cronjob', array( $this, 'cronjob' ) );
 	}
 
 	public function schedule() {
-		if ( false === as_has_scheduled_action( 'cdls_cronjob' ) ) {
-			as_schedule_recurring_action( strtotime( 'now' ), MINUTE_IN_SECONDS * 1, 'cdls_cronjob' );
+		foreach ( self::CRONJOBS as $cronjob_id => $cronjob_class ) {
+			require_once ROOT_DIR . "/includes/cronjobs/class-$cronjob_id-cronjob.php";
+			$cronjob = new $cronjob_class();
+			$cronjob->schedule();
 		}
-	}
-
-	public function cronjob() {
-
-		TXT()::generate( 'Cronjob', TIME()->now() );
 
 	}
 
@@ -47,3 +46,5 @@ class Cronjob_Controller {
 function CRON() {
 	return Cronjob_Controller::instance();
 }
+
+CRON();

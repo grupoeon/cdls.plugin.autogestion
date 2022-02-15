@@ -4,8 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1b77c5a186fd472ceb25829e135068e",
+    "content-hash": "2e1d007dd7b32e6b8311b10e2ffa129a",
     "packages": [
+        {
+            "name": "decidir2/php-sdk",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/decidir/sdk-php-v2.git",
+                "reference": "ef5926e8613b8de3f78cc255184e65992f5e4ebc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/decidir/sdk-php-v2/zipball/ef5926e8613b8de3f78cc255184e65992f5e4ebc",
+                "reference": "ef5926e8613b8de3f78cc255184e65992f5e4ebc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Decidir\\": "Decidir/lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "SDK para Decidir",
+            "support": {
+                "issues": "https://github.com/decidir/sdk-php-v2/issues",
+                "source": "https://github.com/decidir/sdk-php-v2/tree/v1.5.6"
+            },
+            "time": "2021-11-09T14:59:01+00:00"
+        },
         {
             "name": "digitalnature/php-ref",
             "version": "v1.3",

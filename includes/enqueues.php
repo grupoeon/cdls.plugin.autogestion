@@ -23,10 +23,26 @@ add_action(
 			DEBUG ? wp_rand( 0, PHP_INT_MAX ) : VERSION
 		);
 
+		$js_dependencies = array();
+
+		if ( is_single( 'realizar-un-pago' ) ) {
+
+			wp_enqueue_script(
+				TEXT_DOMAIN . '-decidir',
+				'https://live.decidir.com/static/v2.5/decidir.js',
+				null,
+				DEBUG ? wp_rand( 0, PHP_INT_MAX ) : VERSION,
+				true
+			);
+
+			$js_dependencies[] = TEXT_DOMAIN . '-decidir';
+
+		}
+
 		wp_enqueue_script(
 			TEXT_DOMAIN,
 			plugins_url( 'public/autogestion.js', ROOT_FILE ),
-			null,
+			$js_dependencies,
 			DEBUG ? wp_rand( 0, PHP_INT_MAX ) : VERSION,
 			true
 		);

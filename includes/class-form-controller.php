@@ -26,6 +26,7 @@ class Form_Controller {
 		'registro'             => __NAMESPACE__ . '\Registro_Form',
 		'recuperar-contrasena' => __NAMESPACE__ . '\Recuperar_Contrasena_Form',
 		'cambiar-contrasena'   => __NAMESPACE__ . '\Cambiar_Contrasena_Form',
+		'pagos'                => __NAMESPACE__ . '\Pagos_Form',
 		'testing'              => __NAMESPACE__ . '\Testing_Form',
 	);
 

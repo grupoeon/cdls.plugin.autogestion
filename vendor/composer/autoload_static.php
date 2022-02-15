@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
 {
     public static $files = array (
-        '5640faacc2b60a961e5376b0effdd7ef' => __DIR__ . '/..' . '/formr/formr/class.formr.php',
         '7cca0da9604df282f16d129f538c9833' => __DIR__ . '/..' . '/digitalnature/php-ref/ref.php',
+        '5640faacc2b60a961e5376b0effdd7ef' => __DIR__ . '/..' . '/formr/formr/class.formr.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -16,12 +16,20 @@ class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
         array (
             'Valitron\\' => 9,
         ),
+        'D' => 
+        array (
+            'Decidir\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'Valitron\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
+        ),
+        'Decidir\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/decidir2/php-sdk/Decidir/lib',
         ),
     );
 

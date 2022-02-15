@@ -29,6 +29,7 @@ class Autogestion_Controller {
 	const CHANGE_PASSWORD_FORM_ID  = 4084;
 	const RECEIPTS_MENU_ID         = 4269;
 	const TRANSITS_MENU_ID         = 4273;
+	const PAYMENTS_MENU_ID         = 4361;
 
 	/**
 	 * The single instance of the class.
@@ -194,9 +195,14 @@ class Autogestion_Controller {
 						self::BAJAS_FORM_ID,
 						self::RECEIPTS_MENU_ID,
 						self::TRANSITS_MENU_ID,
+						self::PAYMENTS_MENU_ID,
 					),
 					true
 				) && empty( API()->client_number() ) ) {
+					return false;
+				}
+
+				if ( self::PAYMENTS_MENU_ID === $menu_item->ID ) {
 					return false;
 				}
 

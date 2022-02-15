@@ -28,7 +28,7 @@ const VERSION     = '2.0.0';
 const ROOT_DIR    = __DIR__;
 const ROOT_FILE   = __FILE__;
 const POST_TYPE   = 'autogestion';
-const DEBUG       = false;
+const DEBUG       = true;
 const MAINTENANCE = false;
 
 require_once ROOT_DIR . '/vendor/autoload.php';
@@ -44,5 +44,7 @@ require_once ROOT_DIR . '/includes/class-txt-controller.php';
 require_once ROOT_DIR . '/includes/class-autogestion-controller.php';
 require_once ROOT_DIR . '/includes/shortcodes/class-receipts-shortcode.php';
 require_once ROOT_DIR . '/includes/shortcodes/class-transits-shortcode.php';
+require_once ROOT_DIR . '/includes/shortcodes/class-payments-shortcode.php';
 require_once ROOT_DIR . '/lib/action-scheduler/action-scheduler.php';
+require_once ROOT_DIR . '/includes/abstract-class-cronjob.php';
 require_once ROOT_DIR . '/includes/class-cronjob-controller.php';

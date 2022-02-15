@@ -35,6 +35,14 @@ class Time_Controller {
 
 	}
 
+	public function create_from_format( $format = 'Y-m-d H:i:s', $string ) {
+		return \DateTime::createFromFormat(
+			$format,
+			$string,
+			new \DateTimeZone( wp_timezone_string() )
+		);
+	}
+
 }
 
 /**

@@ -79,6 +79,43 @@ SQL,
 		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
 	}
 
+	public function fetch( $query, $parameters = array() ) {
+		$db   = $this->db();
+		$stmt = $db->prepare( $query );
+		$stmt->execute( $parameters );
+		return $stmt->fetch( \PDO::FETCH_ASSOC );
+	}
+
+	public function get_payments( $client_number ) {
+
+		return $this->fetch_all(
+			'SELECT * from facturas_morosas 
+				JOIN facturas
+				ON facturas.orden_venta = facturas_morosas.orden_venta
+				WHERE facturas_morosas.nro_cliente = :nro_cliente',
+			array( 'nro_cliente' => $client_number )
+		);
+
+	}
+
+	public function get_payment( $client_number, $receipt_id ) {
+
+		return $this->fetch(
+			'SELECT * from facturas_morosas 
+				JOIN facturas
+				ON facturas.orden_venta = facturas_morosas.orden_venta
+				WHERE facturas_morosas.nro_cliente = :nro_cliente
+				AND facturas_morosas.orden_venta = :orden_venta
+				AND facturas_morosas.abonado < 1
+				AND facturas_morosas.estado_deuda = "R"',
+			array(
+				'nro_cliente' => $client_number,
+				'orden_venta' => $receipt_id,
+			)
+		);
+
+	}
+
 	public function document_exists( $document, $client_id = null ) {
 		$db  = $this->db();
 		$sql = 'SELECT COUNT(*) FROM clientes WHERE documento = :documento';
