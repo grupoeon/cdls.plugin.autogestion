@@ -60,13 +60,14 @@
     function sdkResponseHandler(status, response) {
       console.log(status);
       if (status != 200 && status != 201) {
-        console.log("error");
-        console.log(response);
+        alert(
+          "Por favor revisá que la información del titular y la tarjeta sean correctas."
+        );
       } else {
-        console.log("success");
-        console.log(response);
         form.querySelector("[name=token_decidir]").value = response.id;
         form.querySelector("[name=tarjeta_bin]").value = response.bin;
+        form.querySelector("input[type=submit]").setAttribute("disabled", true);
+        form.querySelector("input[type=submit]").style.background = "lightgray";
         form.submit();
       }
     }
@@ -77,6 +78,66 @@
       return false;
     }
     //..codigo...
+  };
+
+  const disableFieldsOnProfile = () => {
+    const onProfilePage = window.location.href.match(
+      /\/autogestion\/mi-perfil\//
+    );
+    if (!onProfilePage) return;
+
+    document
+      .querySelector(".fields #id_tipo_documento")
+      .setAttribute("disabled", true);
+    document.querySelector(".fields #documento").setAttribute("disabled", true);
+  };
+
+  const updateCityFields = () => {
+    const provinceField = document.querySelector(".fields #id_provincia");
+    const cityField = document.querySelector(".fields #id_localidad");
+    if (!provinceField || !cityField) return;
+    const options = [...cityField.querySelectorAll("option")];
+
+    const toggleCities = () => {
+      cityField.innerHTML = "";
+      for (let option of options) {
+        if (
+          option.dataset.provinceId != provinceField.value &&
+          option.value != ""
+        ) {
+        } else {
+          cityField.appendChild(option);
+        }
+      }
+    };
+
+    provinceField.addEventListener("change", toggleCities);
+
+    toggleCities();
+  };
+
+  const togglePasswords = () => {
+    const togglePassword = (e) => {
+      if (e.type === "password") e.type = "text";
+      else e.type = "password";
+    };
+    const passwordFields = document.querySelectorAll(
+      ".fields input[type=password]"
+    );
+    passwordFields.forEach((el) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "toggle-password";
+      button.innerHTML = '<i class="fas fa-eye"></i>';
+      el.parentNode.appendChild(button);
+      button.addEventListener("click", () => {
+        togglePassword(el);
+        button.innerHTML =
+          button.innerHTML === '<i class="fas fa-eye"></i>'
+            ? '<i class="fas fa-eye-slash"></i>'
+            : '<i class="fas fa-eye"></i>';
+      });
+    });
   };
 
   window.addEventListener("load", () => {
@@ -95,5 +156,11 @@
     });
 
     setupPaymentsForm();
+
+    disableFieldsOnProfile();
+
+    updateCityFields();
+
+    togglePasswords();
   });
 })();

@@ -12,6 +12,7 @@ namespace CdlS;
 defined( 'ABSPATH' ) || die;
 
 abstract class Cronjob {
+	abstract public static function instance();
 	abstract public function get_id();
 	abstract public function get_frecuency_in_seconds();
 	abstract public function run();
@@ -20,7 +21,7 @@ abstract class Cronjob {
 		return 'cdls_cronjob_' . $this->get_id();
 	}
 
-	public function schedule() {
+	public function __construct() {
 		if ( false === as_has_scheduled_action( $this->get_action() ) ) {
 			as_schedule_recurring_action(
 				strtotime( 'now' ),

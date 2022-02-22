@@ -150,6 +150,39 @@ SQL,
 		return (bool) $stmt->fetchColumn();
 	}
 
+	public function client_has_email( $client_id ) {
+
+		$db   = $this->db();
+		$sql  = 'SELECT clientes.correo FROM clientes WHERE id = :id';
+		$stmt = $db->prepare( $sql );
+		$stmt->execute(
+			array(
+				'id' => $client_id,
+			)
+		);
+		$fetch = $stmt->fetchColumn();
+
+		return ! empty( $fetch );
+
+	}
+
+	public function client_same_email( $client_id, $email ) {
+
+		$db   = $this->db();
+		$sql  = 'SELECT COUNT(*) FROM clientes WHERE id = :id AND correo = :email';
+		$stmt = $db->prepare( $sql );
+		$stmt->execute(
+			array(
+				'id'    => $client_id,
+				'email' => $email,
+			)
+		);
+		$fetch = $stmt->fetchColumn();
+
+		return boolval( $fetch );
+
+	}
+
 
 	public function verify_identity( $document, $domain ) {
 		$db   = $this->db();
@@ -209,7 +242,7 @@ SQL,
 
 	public function get_document_types() {
 		$db   = $this->db();
-		$stmt = $db->prepare( 'SELECT * FROM _tipos_documento' );
+		$stmt = $db->prepare( 'SELECT * FROM _tipos_documento WHERE id IN (2,5)' );
 		$stmt->execute();
 		return $stmt->fetchAll( \PDO::FETCH_ASSOC );
 	}

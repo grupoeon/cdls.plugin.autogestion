@@ -272,8 +272,6 @@ class Pagos_Form extends Form {
 			'sub_payments'        => array(),
 		);
 
-		r( $data );
-
 		try {
 			$response      = $connector->payment()->ExecutePayment( $data );
 			$status        = $response->getStatus();
@@ -320,6 +318,26 @@ class Pagos_Form extends Form {
 					)
 				);
 
+				$nro_cliente = $client_data['nro_cliente'];
+				$orden_venta = $payment['orden_venta'];
+				$saldo       = $payment['saldo'];
+				$date        = TIME()->now();
+
+				wp_mail(
+					'cobranzas@camsierras.com.ar',
+					'Caminos de las Sierras | Nuevo pago a través de la web',
+					"
+						(Este es un mensaje automático)
+						Ingresó un nuevo pago a través del sitio.
+
+						<b>Número de cliente:</b> $nro_cliente
+						<b>Orden venta:</b> $orden_venta
+						<b>Monto:</b> $ $saldo
+						<b>Código de operación (Decidir):</b> $site_transaction_id
+						<b>Fecha del pago:</b> $date
+					"
+				);
+
 				$this->success_message( 'Tu pago se procesó correctamente.' );
 
 			} else {
@@ -330,17 +348,12 @@ class Pagos_Form extends Form {
 				);
 			}
 
-			r( $response );
 			return;
 		} catch ( \PDOException $e ) {
-			r( $e->getMessage() );
-			$this->error_message( 'Ocurrió un error al procesar tu pago.*' );
+			$this->error_message( 'Ocurrió un error al procesar tu pago.' );
 		} catch ( \Exception $e ) {
-			r( $e->getData() );
 			$this->error_message( 'Ocurrió un error al procesar tu pago.' );
 		}
-
-		// wp_mail( $correo, MSG()::EMAIL_CMP_SUBJECT, MSG()::EMAIL_CMP_CONTENT );
 
 	}
 

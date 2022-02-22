@@ -3,6 +3,7 @@
         "formr/formr": "^1.4",
         "vlucas/valitron": "^1.4",
         "digitalnature/php-ref": "^1.3",
-        "decidir2/php-sdk": "^1.5"
+        "decidir2/php-sdk": "^1.5",
+        "parsecsv/php-parsecsv": "^1.3"
     }
 }

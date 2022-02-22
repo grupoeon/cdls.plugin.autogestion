@@ -48,15 +48,25 @@ class Cambiar_Contrasena_Form extends Form {
 
 			echo $this->form->password(
 				array(
-					'name'  => 'contrasena_anterior',
-					'label' => 'Contraseña anterior',
+					'name'   => 'contrasena_anterior',
+					'label'  => 'Contraseña anterior',
+					'string' => 'data-view-password',
 				)
 			);
 
 			echo $this->form->password(
 				array(
-					'name'  => 'contrasena_nueva',
-					'label' => 'Contraseña nueva',
+					'name'   => 'contrasena_nueva',
+					'label'  => 'Contraseña nueva',
+					'string' => 'data-view-password',
+				)
+			);
+
+			echo $this->form->password(
+				array(
+					'name'   => 'contrasena_nueva_confirmar',
+					'label'  => 'Contraseña nueva (confirmar)',
+					'string' => 'data-view-password',
 				)
 			);
 
@@ -72,6 +82,7 @@ class Cambiar_Contrasena_Form extends Form {
 			'required'        => array( 'contrasena_anterior', 'contrasena_nueva' ),
 			'different'       => array( array( 'contrasena_anterior', 'contrasena_nueva' ) ),
 			'currentPassword' => array( 'contrasena_anterior' ),
+			'equals'          => array( array( 'contrasena_nueva', 'contrasena_nueva_confirmar' ) ),
 		);
 
 	}
@@ -79,8 +90,9 @@ class Cambiar_Contrasena_Form extends Form {
 	public static function get_validation_labels() {
 
 		return array(
-			'contrasena_anterior' => 'Contraseña actual',
-			'contrasena_nueva'    => 'Nueva contraseña',
+			'contrasena_anterior'        => 'Contraseña actual',
+			'contrasena_nueva'           => 'Contraseña nueva',
+			'contrasena_nueva_confirmar' => 'Contraseña nueva (confirmar)',
 		);
 
 	}

@@ -24,6 +24,7 @@
 .single-autogestion .cdls-form .fields input[type="text"],
 .single-autogestion .cdls-form .fields input[type="number"],
 .single-autogestion .cdls-form .fields input[type="email"],
+.single-autogestion .cdls-form .fields input[type="password"],
 .single-autogestion .cdls-form .fields select {
   min-width: 15rem;
   width: 15rem;
@@ -32,6 +33,33 @@
 
 .single-autogestion .cdls-form .fields input[type="checkbox"] {
   margin-right: 1rem;
+}
+
+.single-autogestion .cdls-form .fields input[disabled],
+.single-autogestion .cdls-form .fields select[disabled] {
+  background: #d8d8d8;
+  border-color: #d8d8d8;
+  color: gray;
+}
+
+.single-autogestion .cdls-form .fields .mb-3,
+.single-autogestion .cdls-form .fields .mb-3 {
+  position: relative;
+}
+
+.single-autogestion
+  .cdls-form
+  .fields
+  input[type="password"]
+  + .toggle-password,
+.single-autogestion .cdls-form .fields input[type="text"] + .toggle-password {
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: black;
+  margin-left: -2rem;
+  position: absolute;
+  right: 1rem;
 }
 
 .single-autogestion .cdls-form .fields .mb-3 label {

@@ -16,6 +16,10 @@ class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
         array (
             'Valitron\\' => 9,
         ),
+        'P' => 
+        array (
+            'ParseCsv\\' => 9,
+        ),
         'D' => 
         array (
             'Decidir\\' => 8,
@@ -26,6 +30,10 @@ class ComposerStaticInitaa3dd144578412b3038af4ad5c8c1203
         'Valitron\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/valitron/src/Valitron',
+        ),
+        'ParseCsv\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/parsecsv/php-parsecsv/src',
         ),
         'Decidir\\' => 
         array (

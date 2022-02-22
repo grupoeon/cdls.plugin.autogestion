@@ -31,10 +31,14 @@ const POST_TYPE   = 'autogestion';
 const DEBUG       = true;
 const MAINTENANCE = false;
 
+
+/** Generic */
 require_once ROOT_DIR . '/vendor/autoload.php';
 require_once ROOT_DIR . '/includes/post-type.php';
 require_once ROOT_DIR . '/includes/enqueues.php';
+require_once ROOT_DIR . '/includes/abstract-class-singleton.php';
 
+/** Modules  */
 require_once ROOT_DIR . '/includes/class-messages-controller.php';
 require_once ROOT_DIR . '/includes/class-time-controller.php';
 require_once ROOT_DIR . '/includes/class-validations-controller.php';
@@ -46,5 +50,6 @@ require_once ROOT_DIR . '/includes/shortcodes/class-receipts-shortcode.php';
 require_once ROOT_DIR . '/includes/shortcodes/class-transits-shortcode.php';
 require_once ROOT_DIR . '/includes/shortcodes/class-payments-shortcode.php';
 require_once ROOT_DIR . '/lib/action-scheduler/action-scheduler.php';
-require_once ROOT_DIR . '/includes/abstract-class-cronjob.php';
-require_once ROOT_DIR . '/includes/class-cronjob-controller.php';
+
+/** Cronjobs */
+require_once ROOT_DIR . '/includes/class-cronjobs-controller.php';

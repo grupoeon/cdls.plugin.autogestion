@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Valitron\\' => array($vendorDir . '/vlucas/valitron/src/Valitron'),
+    'ParseCsv\\' => array($vendorDir . '/parsecsv/php-parsecsv/src'),
     'Decidir\\' => array($vendorDir . '/decidir2/php-sdk/Decidir/lib'),
 );

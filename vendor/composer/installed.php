@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'bb3b636fccf1d13a54ef38b200de45b4017e1491',
+        'reference' => '1c384965dccdf35ddbbd2ffc72ce3c8f1257b620',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'bb3b636fccf1d13a54ef38b200de45b4017e1491',
+            'reference' => '1c384965dccdf35ddbbd2ffc72ce3c8f1257b620',
             'dev_requirement' => false,
         ),
         'decidir2/php-sdk' => array(
@@ -44,6 +44,15 @@
             'install_path' => __DIR__ . '/../formr/formr',
             'aliases' => array(),
             'reference' => '2d324d5de3343b80d6127b4f202bbc56b2a59376',
+            'dev_requirement' => false,
+        ),
+        'parsecsv/php-parsecsv' => array(
+            'pretty_version' => '1.3.2',
+            'version' => '1.3.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../parsecsv/php-parsecsv',
+            'aliases' => array(),
+            'reference' => '2d6236cae09133e0533d34ed45ba1e1ecafffebb',
             'dev_requirement' => false,
         ),
         'vlucas/valitron' => array(

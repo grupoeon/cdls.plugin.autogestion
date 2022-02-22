@@ -74,17 +74,17 @@ class Perfil_Form extends Form {
 
 		echo $this->form->text(
 			array(
-				'name'  => 'nombre',
-				'label' => 'Nombre',
-				'value' => $client_data['nombre'],
+				'name'  => 'apellido',
+				'label' => 'Apellido',
+				'value' => $client_data['apellido'],
 			)
 		);
 
 		echo $this->form->text(
 			array(
-				'name'  => 'apellido',
-				'label' => 'Apellido',
-				'value' => $client_data['apellido'],
+				'name'  => 'nombre',
+				'label' => 'Nombre',
+				'value' => $client_data['nombre'],
 			)
 		);
 
@@ -165,15 +165,29 @@ class Perfil_Form extends Form {
 			)
 		);
 
-		echo $this->form->select(
-			array(
-				'name'     => 'id_localidad',
-				'label'    => 'Localidad',
-				'options'  => API()->get_cities(),
-				'selected' => 'Seleccione',
-				'value'    => intval( $client_data['id_localidad'] ),
-			)
-		);
+		?>
+
+		<div class="mb-3">
+
+		<label for="id_localidad" class="form-label">Localidad</label>
+		<select name="id_localidad" id="id_localidad" class=" form-control" required="">
+			<option value="">Seleccione</option>
+			<?php foreach ( DB()->get_cities() as $city ) : ?>
+				<?php
+					$city_id       = $city['id'];
+					$city_name     = $city['nombre'];
+					$city_province = $city['id_provincia'];
+				?>
+				<option 
+					value="<?php echo esc_attr( $city_id ); ?>"
+					data-province-id="<?php echo esc_attr( $city_province ); ?>"
+				><?php echo esc_html( $city_name ); ?></option>
+			<?php endforeach; ?>
+		</select>
+
+		</div>
+
+		<?php
 
 		echo $this->form->text(
 			array(

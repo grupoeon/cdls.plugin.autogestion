@@ -45,11 +45,14 @@ class Receipts_Shortcode {
 		}
 
 		$receipts = DB()->query(
-			'SELECT * FROM `facturas`
-				LEFT JOIN facturas_morosas ON facturas.orden_venta = facturas_morosas.orden_venta
-				WHERE facturas.nro_cliente = :nro_cliente 
-				ORDER BY vencimiento_factura DESC,
-						nro_factura DESC
+			'SELECT 
+			facturas.id,facturas.orden_venta,facturas.nro_cliente,facturas.punto_venta,facturas.tipo_factura,facturas.nro_factura,facturas.monto_factura,facturas.emision_factura,facturas.vencimiento_factura,facturas.codigo_facturacion,facturas_morosas.estado_deuda,facturas_morosas.saldo,facturas_morosas.abonado
+					FROM `facturas`
+					LEFT JOIN facturas_morosas ON facturas.orden_venta = facturas_morosas.orden_venta
+						WHERE facturas.nro_cliente = :nro_cliente
+						GROUP BY facturas.id
+						ORDER BY vencimiento_factura DESC,
+								nro_factura DESC;
 			',
 			array(
 				'nro_cliente' => $client_number,
@@ -79,9 +82,7 @@ class Receipts_Shortcode {
 					<th>Vencimiento</th>
 					<th>Monto</th>
 					<th>Descargar</th>
-					<?php if ( current_user_can( 'manage_options' ) ) : ?>
 					<th>Pagar</th>
-					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -102,13 +103,21 @@ class Receipts_Shortcode {
 						<td><?php echo esc_html( $receipt['nro_factura'] ); ?></td>
 						<td><?php echo esc_html( $receipt['tipo_factura'] ); ?></td>
 						<td><?php echo esc_html( $receipt['vencimiento_factura'] ); ?></td>
-						<td><?php echo esc_html( $receipt['monto_factura'] ); ?></td>
+						<td>
+							<?php
+							if ( 'R' === $receipt['estado_deuda']
+										&& 0 === intval( $receipt['abonado'] ) ) :
+								?>
+								<?php echo esc_html( $receipt['saldo'] ); ?>
+								<?php else : ?>
+									<?php echo esc_html( $receipt['monto_factura'] ); ?>
+								<?php endif; ?>
+						</td>
 						<td>
 							<a href="<?php echo esc_html( API()->get_receipt_url( $receipt ) ); ?>">
 								<i class="fas fa-download"></i>
 							</a>
 						</td>
-						<?php if ( current_user_can( 'manage_options' ) ) : ?>
 						<td>
 							<?php
 							if ( 'R' === $receipt['estado_deuda']
@@ -122,7 +131,6 @@ class Receipts_Shortcode {
 							(Al día)
 							<?php endif; ?>
 						</td>
-						<?php endif; ?>
 					</tr>
 					<?php
 

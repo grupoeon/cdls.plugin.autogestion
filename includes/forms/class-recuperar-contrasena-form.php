@@ -136,39 +136,73 @@ class Recuperar_Contrasena_Form extends Form {
 
 		} else {
 
-			if ( DB()->email_exists( $correo ) ) {
+			if ( DB()->client_has_email( $client_id ) ) {
 
-				$this->error_message( MSG()::EMAIL_EXISTS );
+				if ( DB()->client_same_email( $client_id, $correo ) ) {
 
+					$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
+					$hash     = password_hash( $password, PASSWORD_DEFAULT );
+
+					DB()->insert(
+						'UPDATE clientes 
+						SET 
+							contrasena = :contrasena
+						WHERE id = :id',
+						array(
+							'id'         => $client_id,
+							'contrasena' => $hash,
+						)
+					);
+
+					wp_mail(
+						$correo,
+						MSG()::MAIL_REGISTRATION_SUBJECT,
+						sprintf( MSG()::MAIL_REGISTRATION_CONTENT, $password )
+					);
+
+					$this->success_message( MSG()::NEW_PASSWORD_SENT );
+
+				} else {
+
+					$this->error_message( 'El correo electrónico ingresado no coincide con nuestros registros.' );
+
+				}
 			} else {
 
-				$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
-				$hash     = password_hash( $password, PASSWORD_DEFAULT );
+				if ( DB()->email_exists( $correo ) ) {
 
-				DB()->insert(
-					'UPDATE clientes 
-					SET 
-						correo = :correo,
-						registrado = 1,
-						fecha_registro = :fecha,
-						contrasena = :contrasena
-					WHERE id = :id',
-					array(
-						'id'         => $client_id,
-						'correo'     => $correo,
-						'contrasena' => $hash,
-						'fecha'      => TIME()->now( 'Y-m-d H:i:s' ),
-					)
-				);
+					$this->error_message( 'El correo electrónico ingresado ya está registrado en otra cuenta, por favor ingrese un correo electrónico distinto.' );
 
-				wp_mail(
-					$correo,
-					MSG()::MAIL_REGISTRATION_SUBJECT,
-					sprintf( MSG()::MAIL_REGISTRATION_CONTENT, $password )
-				);
+				} else {
 
-				$this->success_message( MSG()::NEW_PASSWORD_SENT );
+					$password = bin2hex( openssl_random_pseudo_bytes( 4 ) );
+					$hash     = password_hash( $password, PASSWORD_DEFAULT );
 
+					DB()->insert(
+						'UPDATE clientes 
+						SET 
+							correo = :correo,
+							registrado = 1,
+							fecha_registro = :fecha,
+							contrasena = :contrasena
+						WHERE id = :id',
+						array(
+							'id'         => $client_id,
+							'correo'     => $correo,
+							'contrasena' => $hash,
+							'fecha'      => TIME()->now( 'Y-m-d H:i:s' ),
+						)
+					);
+
+					wp_mail(
+						$correo,
+						MSG()::MAIL_REGISTRATION_SUBJECT,
+						sprintf( MSG()::MAIL_REGISTRATION_CONTENT, $password )
+					);
+
+					$this->success_message( MSG()::NEW_PASSWORD_SENT );
+
+				}
 			}
 		}
 
