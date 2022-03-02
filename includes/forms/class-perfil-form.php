@@ -25,6 +25,8 @@ class Perfil_Form extends Form {
 			FORM()->add_error_messages_from_validation( $this, $client_data_complete['errors'] );
 		}
 
+		$this->warning_message( MSG()::NEED_TO_CHANGE_DOCUMENT, true );
+
 		echo $this->form->open(
 			$this->form->id,
 			$this->form->name,
@@ -181,6 +183,7 @@ class Perfil_Form extends Form {
 				<option 
 					value="<?php echo esc_attr( $city_id ); ?>"
 					data-province-id="<?php echo esc_attr( $city_province ); ?>"
+					<?php selected( $city_id, $client_data['id_localidad'] ); ?>
 				><?php echo esc_html( $city_name ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -247,12 +250,19 @@ class Perfil_Form extends Form {
 					),
 				),
 				array(
-					'required'  => array( 'nombre', 'apellido' ),
-					'lengthMax' => array(
+					'required'      => array( 'nombre', 'apellido' ),
+					'lengthMax'     => array(
 						array( 'apellido', 50 ),
 						array( 'nombre', 50 ),
 					),
-					'regex'     => array(
+					'lengthBetween' => array(
+						array(
+							'documento',
+							7,
+							8,
+						),
+					),
+					'regex'         => array(
 						array( 'nombre', "/[\w \.']+/" ),
 						array( 'apellido', "/[\w \.']+/" ),
 					),
@@ -270,6 +280,9 @@ class Perfil_Form extends Form {
 					'required'  => array( 'razon_social' ),
 					'lengthMax' => array(
 						array( 'razon_social', 80 ),
+					),
+					'length'    => array(
+						array( 'documento', 11 ),
 					),
 					'regex'     => array(
 						array( 'razon_social', "/[\w \.\d']+/" ),

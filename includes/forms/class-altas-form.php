@@ -129,19 +129,26 @@ class Altas_Form extends Form {
 		$cmp_rules   = $cmp_handler::get_validation_rules( $data );
 
 		$rules = array(
-			'required' => array(
+			'required'  => array(
 				'marca',
 				'modelo',
 				'dominio',
 				'dominio_confirmar',
 				'id_categoria',
 			),
-			'in'       => array(
+			'in'        => array(
 				array( 'id_categoria', array( 2, 3, 4, 5, 6, 7 ) ),
 			),
-			'alphaNum' => array( 'marca', 'modelo' ),
-			'domain'   => array( 'dominio', 'dominio_confirmar' ),
-			'equals'   => array(
+			'regex'     => array(
+				array( 'marca', '/^[A-Za-z0-9 ]+$/' ),
+				array( 'modelo', '/^[A-Za-z0-9 ]+$/' ),
+			),
+			'lengthMax' => array(
+				array( 'marca', 20 ),
+				array( 'modelo', 20 ),
+			),
+			'domain'    => array( 'dominio', 'dominio_confirmar' ),
+			'equals'    => array(
 				array( 'dominio', 'dominio_confirmar' ),
 			),
 		);

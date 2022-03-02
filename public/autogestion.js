@@ -88,8 +88,8 @@
 
     document
       .querySelector(".fields #id_tipo_documento")
-      .setAttribute("disabled", true);
-    document.querySelector(".fields #documento").setAttribute("disabled", true);
+      .setAttribute("readonly", true);
+    document.querySelector(".fields #documento").setAttribute("readonly", true);
   };
 
   const updateCityFields = () => {

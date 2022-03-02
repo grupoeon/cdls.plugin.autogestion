@@ -41,7 +41,7 @@ class Validations_Controller {
 		Validator::addRule(
 			'domain',
 			function( $field, $value, array $params, array $fields ) {
-				return preg_match( '/\w{2}\d{3}\w{2}|\w{3}\d{3}/', $value );
+				return preg_match( '/[A-Za-z]{2}\d{3}[A-Za-z]{2}|[A-Za-z]{3}\d{3}/', $value );
 			},
 			'tiene un formato incorrecto. Formato: AA000AA ó AAA000.'
 		);
@@ -49,7 +49,7 @@ class Validations_Controller {
 		Validator::addRule(
 			'domainBajas',
 			function( $field, $value, array $params, array $fields ) {
-				return preg_match( '/\w{2}\d{3}\w{2}|\w{3}\d{3}|\d{3}\w{3}|\w\d{3}\w{3}/', $value );
+				return preg_match( '/[A-Za-z]{2}\d{3}[A-Za-z]{2}|[A-Za-z]{3}\d{3}|\d{3}[A-Za-z]{3}|[A-Za-z]\d{3}[A-Za-z]{3}/', $value );
 			},
 			'tiene un formato incorrecto.'
 		);

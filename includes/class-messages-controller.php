@@ -164,6 +164,10 @@ MSG;
 	Ha ocurrido un error al intentar procesar tu solicitud, por favor, intentelo más tarde,
 MSG;
 
+	const NEED_TO_CHANGE_DOCUMENT = <<<MSG
+	Si necesitás cambiar tu tipo de documento o número de documento, por favor comunicate con la Oficina de Atención al Usuario de Caminos de las Sierras.
+MSG;
+
 }
 
 /**

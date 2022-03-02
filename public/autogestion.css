@@ -35,11 +35,13 @@
   margin-right: 1rem;
 }
 
-.single-autogestion .cdls-form .fields input[disabled],
-.single-autogestion .cdls-form .fields select[disabled] {
+.single-autogestion .cdls-form .fields input[readonly],
+.single-autogestion .cdls-form .fields select[readonly] {
   background: #d8d8d8;
   border-color: #d8d8d8;
   color: gray;
+  pointer-events: none;
+  touch-action: none;
 }
 
 .single-autogestion .cdls-form .fields .mb-3,

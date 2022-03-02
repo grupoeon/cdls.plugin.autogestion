@@ -29,9 +29,9 @@ class Modificaciones_Cronjob extends Cronjob {
 		return MINUTE_IN_SECONDS * 5;
 	}
 
-	const MODIFICACIONES_FOLDER = ABSPATH . 'proytec/peajes/__test_modificaciones';
-	const CLIENTS_TABLE         = '__test_clientes';
-	const VEHICLES_TABLE        = '__test_vehiculos';
+	const MODIFICACIONES_FOLDER = ABSPATH . 'proytec/peajes/modificaciones';
+	const CLIENTS_TABLE         = 'clientes';
+	const VEHICLES_TABLE        = 'vehiculos';
 	const MAX_FILES_PER_RUN     = 1;
 
 
@@ -57,6 +57,7 @@ class Modificaciones_Cronjob extends Cronjob {
 		$lines = $this->get_lines( $file );
 
 		if ( empty( $lines ) ) {
+			$this->move_file( $file );
 			return;
 		}
 
@@ -67,7 +68,11 @@ class Modificaciones_Cronjob extends Cronjob {
 			if ( $this->client_exists( $client_number ) ) {
 				$this->update_client( $line );
 			} else {
-				$this->insert_client( $line );
+				if ( $this->client_exists_by_document( $line['documento'] ) ) {
+					$this->update_client_by_document( $line );
+				} else {
+					$this->insert_client( $line );
+				}
 			}
 
 			$iso_band = $line['banda_iso'];
@@ -99,6 +104,26 @@ class Modificaciones_Cronjob extends Cronjob {
 			$stmt->execute(
 				array(
 					'client_number' => $client_number,
+				)
+			);
+
+			return (bool) $stmt->fetchColumn();
+		} catch ( \PDOException $e ) {
+			return null;
+		}
+
+	}
+
+	private function client_exists_by_document( $document_number ) {
+
+		try {
+			$clients_table = self::CLIENTS_TABLE;
+
+			$db   = DB()->db();
+			$stmt = $db->prepare( "SELECT COUNT(id) FROM $clients_table WHERE documento = :document_number" );
+			$stmt->execute(
+				array(
+					'document_number' => $document_number,
 				)
 			);
 
@@ -145,6 +170,7 @@ class Modificaciones_Cronjob extends Cronjob {
 					id_condicion_fiscal,
 					cuenta_corriente,
 					registrado,
+					fecha_registro,
 					contrasena
 				) VALUES (
 					:client_number,
@@ -163,6 +189,7 @@ class Modificaciones_Cronjob extends Cronjob {
 					:fiscal_condition_id,
 					0,
 					0,
+					NULL,
 					NULL
 				)",
 				array(
@@ -221,6 +248,63 @@ class Modificaciones_Cronjob extends Cronjob {
 						id_localidad = :city_id,
 						id_condicion_fiscal = :fiscal_condition_id
 					WHERE nro_cliente = :client_number 
+				",
+				array(
+					'client_number'       => $client_number,
+					'document_type_id'    => $document_type_id,
+					'document'            => $document,
+					'last_name'           => $last_name,
+					'first_name'          => $name,
+					'company_name'        => $company_name,
+					'phone'               => $phone,
+					'street'              => $street,
+					'street_number'       => $street_number,
+					'postcode'            => $postcode,
+					'province_id'         => $province_id,
+					'city_id'             => $city_id,
+					'fiscal_condition_id' => $fiscal_condition_id,
+				)
+			);
+		} catch ( \PDOException $e ) {
+			r( $line );
+			r( $e->getMessage() );
+		}
+
+	}
+
+	private function update_client_by_document( $line ) {
+
+		$clients_table       = self::CLIENTS_TABLE;
+		$client_number       = $line['nro_cliente'];
+		$document_type_id    = $line['id_tipo_documento'];
+		$document            = $line['documento'];
+		$last_name           = 5 === intval( $document_type_id ) ? $line['apellido'] : null;
+		$name                = 5 === intval( $document_type_id ) ? $line['nombre'] : null;
+		$company_name        = 2 === intval( $document_type_id ) ? $line['apellido'] : null;
+		$phone               = $line['telefono'];
+		$street              = $line['calle'];
+		$street_number       = $line['nro_calle'];
+		$postcode            = $line['codigo_postal'];
+		$province_id         = $line['id_provincia'];
+		$city_id             = $line['id_localidad'];
+		$fiscal_condition_id = $line['id_condicion_fiscal'];
+
+		try {
+			DB()->insert(
+				"UPDATE `$clients_table` 
+					SET id_tipo_documento = :document_type_id,
+						nro_cliente = :client_number,
+						apellido = :last_name,
+						nombre = :first_name,
+						razon_social = :company_name,
+						telefono = :phone,
+						calle = :street,
+						nro_calle = :street_number,
+						codigo_postal = :postcode,
+						id_provincia = :province_id,
+						id_localidad = :city_id,
+						id_condicion_fiscal = :fiscal_condition_id
+					WHERE documento = :document 
 				",
 				array(
 					'client_number'       => $client_number,
@@ -415,20 +499,12 @@ class Modificaciones_Cronjob extends Cronjob {
 	private function get_document_type( $document ) {
 
 		switch ( $document ) {
-			case 'DNI':
-				return 5;
 			case 'CUIT':
 				return 2;
-			case 'LC':
-				return 4;
-			case 'LE':
-				return 3;
-			case 'CI':
-				return 1;
-			case 'CUIL':
-				return 6;
+			case 'DNI':
+				return 5;
 			default:
-				return null;
+				return 5;
 		}
 
 	}
