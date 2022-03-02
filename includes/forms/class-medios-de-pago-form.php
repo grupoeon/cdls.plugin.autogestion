@@ -118,6 +118,14 @@ class Medios_De_Pago_Form extends Form {
 				'lengthMax'     => array(
 					array( 'nombre', 50 ),
 				),
+				'min'           => array(
+					array( 'vencimiento_tarjeta_mes', 1 ),
+					array( 'vencimiento_tarjeta_ano', 2022 ),
+				),
+				'max'           => array(
+					array( 'vencimiento_tarjeta_mes', 12 ),
+					array( 'vencimiento_tarjeta_ano', intval( gmdate( 'Y' ) ) + 15 ),
+				),
 			),
 			V()->when(
 				$data,

@@ -318,24 +318,34 @@ class Pagos_Form extends Form {
 					)
 				);
 
-				$nro_cliente = $client_data['nro_cliente'];
-				$orden_venta = $payment['orden_venta'];
-				$saldo       = $payment['saldo'];
-				$date        = TIME()->now();
+				$nro_cliente          = $client_data['nro_cliente'];
+				$correo_cliente       = $client_data['correo'];
+				$nombre_cliente       = $client_data['nombre'] ?: '-';
+				$apellido_cliente     = $client_data['apellido'] ?: '-';
+				$razon_social_cliente = $client_data['razon_social'] ?: '-';
+				$orden_venta          = $payment['orden_venta'];
+				$saldo                = $payment['saldo'];
+				$date                 = TIME()->now();
 
 				wp_mail(
 					'cobranzas@camsierras.com.ar',
-					'Caminos de las Sierras | Nuevo pago a través de la web',
+					"PAGO WEB | CLIENTE Nº $nro_cliente | ORDEN VENTA Nº $orden_venta",
 					"
 						(Este es un mensaje automático)
 						Ingresó un nuevo pago a través del sitio.
 
 						<b>Número de cliente:</b> $nro_cliente
+						<b>Correo del cliente:</b> $correo_cliente
+						<b>Nombre:</b> $nombre_cliente
+						<b>Apellido:</b> $apellido_cliente
+						<b>Razón Social:</b> $razon_social_cliente
+
 						<b>Orden venta:</b> $orden_venta
 						<b>Monto:</b> $ $saldo
 						<b>Código de operación (Decidir):</b> $site_transaction_id
 						<b>Fecha del pago:</b> $date
-					"
+					",
+					array( 'Reply-To: ' . $client_data['correo'] )
 				);
 
 				$this->success_message( 'Tu pago se procesó correctamente.' );
