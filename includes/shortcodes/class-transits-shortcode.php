@@ -24,6 +24,104 @@ class Transits_Shortcode {
 
 		add_shortcode( 'cdls_transits', array( $this, 'render' ) );
 
+		add_filter(
+			'template_include',
+			function ( $template ) {
+				if ( is_page( 'pdf-transito' ) ) {
+					return ROOT_DIR . '/includes/transits/transits.php';
+				}
+				return $template;
+			},
+			99
+		);
+
+	}
+
+	private function get_periods( $client_number ) {
+
+		return DB()->query(
+			"SELECT DISTINCT DATE_FORMAT(fecha_transito, '%m/%Y') as periodo FROM transitos WHERE nro_cliente = :nro_cliente ORDER BY fecha_transito DESC;",
+			array(
+				'nro_cliente' => $client_number,
+			)
+		);
+
+	}
+
+	private function get_transits( $client_number ) {
+
+		return DB()->query(
+			'SELECT transitos.id,dominio,fecha_transito,id_estacion,sentido_transito FROM `transitos`
+				JOIN vehiculos
+				ON vehiculos.banda_iso = transitos.banda_iso
+				WHERE transitos.nro_cliente = :nro_cliente 
+				GROUP BY transitos.id
+				ORDER BY fecha_transito DESC;
+			',
+			array(
+				'nro_cliente' => $client_number,
+			)
+		);
+
+	}
+
+	public function render2() {
+
+		$is_logged_in  = AG()->is_client_logged_in();
+		$client_number = API()->client_number();
+
+		ob_start();
+
+		if ( ! $is_logged_in || ! $client_number ) {
+
+			?>
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				Debés estar logueado y tener al menos un alta aprobada para ver tus tránsitos.
+			</div>
+			<?php
+			return ob_get_clean();
+
+		}
+
+		$periods = $this->get_periods( $client_number );
+
+		?>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Período de Facturación</th>
+					<th>Descargar</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<?php
+
+				foreach ( $periods as $period ) :
+
+					?>
+					<tr>
+						<td><?php echo esc_html( $period['periodo'] ); ?></td>
+						<td>
+							<a href="<?php echo esc_attr( API()->get_pdf_transits_url( $period['periodo'] ) ); ?>" target="_blank">
+								<i class="fas fa-download"></i>
+							</a>
+						</td>
+					</tr>
+					<?php
+
+				endforeach;
+
+				?>
+
+			</tbody>
+		</table>
+
+		<?php
+
+		return ob_get_clean();
+
 	}
 
 	public function render() {
@@ -44,11 +142,17 @@ class Transits_Shortcode {
 
 		}
 
+		if ( $client_number == 23784 ) {
+			ob_get_clean();
+			return $this->render2();
+		}
+
 		$transits = DB()->query(
-			'SELECT dominio,fecha_transito,id_estacion,sentido_transito FROM `transitos`
+			'SELECT transitos.id,dominio,fecha_transito,id_estacion,sentido_transito FROM `transitos`
 				JOIN vehiculos
 				ON vehiculos.banda_iso = transitos.banda_iso
 				WHERE transitos.nro_cliente = :nro_cliente 
+				GROUP BY transitos.id
 				ORDER BY fecha_transito DESC;
 			',
 			array(
@@ -56,7 +160,8 @@ class Transits_Shortcode {
 			)
 		);
 
-		$stations   = API()->get_stations();
+		$stations = API()->get_stations();
+
 		$directions = array(
 			0 => 'Desde Córdoba ⤴',
 			1 => '⤵ Hacia Córdoba',

@@ -7,6 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Valitron\\' => array($vendorDir . '/vlucas/valitron/src/Valitron'),
+    'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src/Svg'),
+    'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
     'ParseCsv\\' => array($vendorDir . '/parsecsv/php-parsecsv/src'),
+    'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
+    'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
     'Decidir\\' => array($vendorDir . '/decidir2/php-sdk/Decidir/lib'),
 );

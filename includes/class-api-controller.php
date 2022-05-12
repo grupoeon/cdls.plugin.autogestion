@@ -43,6 +43,12 @@ class API_Controller {
 		return self::$_instance;
 	}
 
+	public function get_pdf_transits_url( $period ) {
+
+		return home_url( '/pdf-transito?period=' . urlencode( $period ) );
+
+	}
+
 	public function get_receipt_url( $receipt ) {
 
 		$orden_venta   = str_pad( $receipt['orden_venta'], 8, '0', STR_PAD_LEFT );
