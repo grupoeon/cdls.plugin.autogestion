@@ -65,7 +65,7 @@ class Transits_Shortcode {
 
 	}
 
-	public function render2() {
+	public function render() {
 
 		$is_logged_in  = AG()->is_client_logged_in();
 		$client_number = API()->client_number();
@@ -84,6 +84,19 @@ class Transits_Shortcode {
 		}
 
 		$periods = $this->get_periods( $client_number );
+
+		if ( ! count( $periods ) ) {
+
+			?>
+
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				No tienes tránsitos para mostrar.
+			</div>
+
+			<?php
+			return ob_get_clean();
+
+		}
 
 		?>
 
@@ -124,7 +137,7 @@ class Transits_Shortcode {
 
 	}
 
-	public function render() {
+	public function renderOld() {
 
 		$is_logged_in  = AG()->is_client_logged_in();
 		$client_number = API()->client_number();

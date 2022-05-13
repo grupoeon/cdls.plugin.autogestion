@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'be8c58279d9489c385381bdd2e4ed39f569e4670',
+        'reference' => 'ef3b6ae8606c8fe3ced32ea4f2ca38f387e69743',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'be8c58279d9489c385381bdd2e4ed39f569e4670',
+            'reference' => 'ef3b6ae8606c8fe3ced32ea4f2ca38f387e69743',
             'dev_requirement' => false,
         ),
         'decidir2/php-sdk' => array(
@@ -89,6 +89,15 @@
             'install_path' => __DIR__ . '/../sabberworm/php-css-parser',
             'aliases' => array(),
             'reference' => 'e41d2140031d533348b2192a83f02d8dd8a71d30',
+            'dev_requirement' => false,
+        ),
+        'tecnickcom/tcpdf' => array(
+            'pretty_version' => '6.4.4',
+            'version' => '6.4.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
+            'aliases' => array(),
+            'reference' => '42cd0f9786af7e5db4fcedaa66f717b0d0032320',
             'dev_requirement' => false,
         ),
         'vlucas/valitron' => array(

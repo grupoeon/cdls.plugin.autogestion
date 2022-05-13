@@ -5,6 +5,7 @@
         "digitalnature/php-ref": "^1.3",
         "decidir2/php-sdk": "^1.5",
         "parsecsv/php-parsecsv": "^1.3",
-        "dompdf/dompdf": "^1.2"
+        "dompdf/dompdf": "^1.2",
+        "tecnickcom/tcpdf": "^6.4"
     }
 }
