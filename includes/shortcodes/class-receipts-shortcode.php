@@ -128,7 +128,7 @@ class Receipts_Shortcode {
 								Pagar
 							</a>
 							<?php else : ?>
-							(Al día)
+							-
 							<?php endif; ?>
 						</td>
 					</tr>
