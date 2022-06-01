@@ -166,6 +166,47 @@ SQL
 	 *
 	 * @return true|array
 	 */
+
+	public function get_client_status( $client_id = null ) {
+
+		session_start();
+
+		if( empty( $client_id ) ) {
+			$client_id = $_SESSION['autogestion_id'];
+		}
+
+		if( empty( $client_id ) ){
+			return false;
+		}
+
+		
+
+		return DB()->get_client_status($client_id);
+	}
+
+	 public function check_client_status( $client_id = null ) {
+		 
+		session_start();
+
+		if( empty( $client_id ) ) {
+			$client_id = $_SESSION['autogestion_id'];
+		}
+
+		if( empty( $client_id ) ){
+			return false;
+		}
+
+		$client_status = $this->get_client_status($client_id);
+
+		if( empty( $client_status ) ){
+			return false;
+		}else{
+			return true;
+		}
+
+
+	 }
+
 	public function is_client_data_complete( $client_id = null ) {
 
 		session_start();

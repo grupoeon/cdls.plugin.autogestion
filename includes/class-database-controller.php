@@ -301,6 +301,13 @@ SQL,
 		$stmt->execute( array( 'client_id' => $client_id ) );
 		return $stmt->fetch( \PDO::FETCH_ASSOC );
 	}
+
+	public function get_client_status($client_id){
+		$db   = $this->db();
+		$stmt = $db->prepare( 'SELECT clientes.id, clientes.nro_cliente, clientes.nombre, clientes.apellido, clientes_judiciales.cme FROM clientes INNER JOIN clientes_judiciales ON clientes.nro_cliente=clientes_judiciales.nro_cliente WHERE clientes.id = '.$client_id.'' );
+		$stmt->execute();
+		return $stmt->fetch( \PDO::FETCH_ASSOC);
+	}
 }
 
 /**

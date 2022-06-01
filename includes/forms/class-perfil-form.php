@@ -21,8 +21,14 @@ class Perfil_Form extends Form {
 
 		$client_data_complete = API()->is_client_data_complete();
 
+		$client_status = API()->check_client_status();
+
 		if ( ! $client_data_complete['valid'] ) {
 			FORM()->add_error_messages_from_validation( $this, $client_data_complete['errors'] );
+		}
+
+		if( $client_status ){
+			$this->error_message( MSG()::NEED_TO_COMMUNICATE, true );
 		}
 
 		$this->warning_message( MSG()::NEED_TO_CHANGE_DOCUMENT, true );

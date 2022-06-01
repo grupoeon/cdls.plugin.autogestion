@@ -25,6 +25,7 @@ class Autogestion_Controller {
 	const REGISTER_FORM_ID         = 3750;
 	const PAYMENT_FORM_ID          = 3372;
 	const BAJAS_FORM_ID            = 3373;
+	const ALTAS_FORM_ID            = 3374;
 	const MENU_ID                  = 13;
 	const CHANGE_PASSWORD_FORM_ID  = 4084;
 	const RECEIPTS_MENU_ID         = 4269;
@@ -208,6 +209,15 @@ class Autogestion_Controller {
 
 				if ( self::CHANGE_PASSWORD_FORM_ID === $menu_item->ID && ! AG()->is_client_logged_in() ) {
 					return false;
+				}
+
+				if ( self::BAJAS_FORM_ID === $menu_item->ID && AG()->is_client_logged_in() && API()->check_client_status() ) {
+					return false;
+				}
+
+				if ( self::ALTAS_FORM_ID === $menu_item->ID && AG()->is_client_logged_in() && API()->check_client_status() ) {
+					return false;
+					
 				}
 
 				return true;

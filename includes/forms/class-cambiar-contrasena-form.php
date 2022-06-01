@@ -16,6 +16,11 @@ class Cambiar_Contrasena_Form extends Form {
 	 */
 	public function build() {
 
+		$client_status = API()->check_client_status();
+		if( $client_status ){
+			$this->error_message( MSG()::NEED_TO_COMMUNICATE, true );
+		}
+
 		echo $this->form->open(
 			$this->form->id,
 			$this->form->name,

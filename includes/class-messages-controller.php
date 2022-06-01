@@ -168,6 +168,13 @@ MSG;
 	Si necesitás cambiar tu tipo de documento o número de documento, por favor comunicate con la Oficina de Atención al Usuario de Caminos de las Sierras.
 MSG;
 
+	const NEED_TO_COMMUNICATE = <<<MSG
+	Debido a que usted se encuentra con deuda judicial, no se le permitirá realizar Altas ni Bajas de vehículos hasta que regularice su situación.
+	<br>
+	<br>
+	Para regularizar su situacíon, debe comunicarse con el Sector de Cobranzas: cobranzas@camsierras.com.ar ó al teléfono 0351 4982400 opción 2
+MSG;
+
 }
 
 /**

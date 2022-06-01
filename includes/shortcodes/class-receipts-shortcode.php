@@ -30,13 +30,18 @@ class Receipts_Shortcode {
 
 		$is_logged_in  = AG()->is_client_logged_in();
 		$client_number = API()->client_number();
+		$client_status = API()->check_client_status();
+
+		if( $client_status ){
+			echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">'.MSG()::NEED_TO_COMMUNICATE.'</div>';
+		}
 
 		ob_start();
 
 		if ( ! $is_logged_in || ! $client_number ) {
 
 			?>
-			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
 				Debés estar logueado y tener al menos un alta aprobada para ver tus facturas.
 			</div>
 			<?php
